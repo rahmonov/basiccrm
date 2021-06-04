@@ -40,3 +40,10 @@ class ClientCreateView(View):
             return redirect(reverse('clients:list'))
 
         return render(request, 'clients/create.html', context)
+
+
+class ClientDeleteView(View):
+    def get(self, request, id):
+        client = Client.objects.get(id=id)
+        client.delete()
+        return redirect(reverse('clients:list'))
