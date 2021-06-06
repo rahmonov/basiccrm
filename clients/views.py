@@ -85,7 +85,7 @@ def update(request, id):
     return render(request, 'clients/update.html', context)
 
 
-# TODO: clarify why class based view does not work
+# TODO: clarify why class based view does not work with updating client
 # class ClientUpdateView(View):
 #     def get(self, request, id):
 #         client = get_object_or_404(Client, pk=id)
