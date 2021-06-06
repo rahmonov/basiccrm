@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
 
@@ -52,23 +52,64 @@ class IndexView(View):
 
 class ClientDeleteView(View):
     def get(self, request, id):
-        client = Client.objects.get(id=id)
+        client = get_object_or_404(Client, pk=id)
         client.delete()
         return redirect(reverse('clients:index'))
 
 
-class ClientUpdateView(View):
-    def get(self, request, id):
-        client = Client.objects.get(id=id)
-        form = ClientForm(instance=client)
-        if request.method == 'POST':
-            form = ClientForm(request.POST, instance=client)
-            if form.is_valid():
-                form.save()
-                return redirect(reverse('clients:index'))
-        # TODO: need to fix the POST METHOD
-        context = {
-            'form': form
-        }
+def update(request, id):
+    client = get_object_or_404(Client, pk=id)
 
-        return render(request, 'clients/update.html', context)
+    if request.method == 'POST':
+        form = ClientForm(request.POST)
+        if form.is_valid():
+            client.first_name = form.cleaned_data['first_name']
+            client.last_name = form.cleaned_data['last_name']
+            client.business_owner = form.cleaned_data['business_owner']
+            client.agent = form.cleaned_data['agent']
+            client.profile_picture = form.cleaned_data['profile_picture']
+            client.address = form.cleaned_data['address']
+            client.gender = form.cleaned_data['gender']
+            client.phone_number = form.cleaned_data['phone_number']
+            client.email = form.cleaned_data['email']
+            client.birthdate = form.cleaned_data['birthdate']
+            client.save()
+
+            return redirect(reverse('clients:index'))
+    else:
+        form = ClientForm(instance=client)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'clients/update.html', context)
+
+
+# TODO: clarify why class based view does not work
+# class ClientUpdateView(View):
+#     def get(self, request, id):
+#         client = get_object_or_404(Client, pk=id)
+#
+#         if request.method == 'POST':
+#             form = ClientForm(request.POST)
+#             if form.is_valid():
+#
+#                 client.first_name = form.cleaned_data['first_name']
+#                 client.last_name = form.cleaned_data['last_name']
+#                 client.business_owner = form.cleaned_data['business_owner']
+#                 client.agent = form.cleaned_data['agent']
+#                 client.profile_picture = form.cleaned_data['profile_picture']
+#                 client.address = form.cleaned_data['address']
+#                 client.gender = form.cleaned_data['gender']
+#                 client.phone_number = form.cleaned_data['phone_number']
+#                 client.email = form.cleaned_data['email']
+#                 client.birthdate = form.cleaned_data['birthdate']
+#                 client.save()
+#
+#                 return redirect(reverse('clients:index'))
+#         else:
+#             form = ClientForm(instance=client)
+#         context = {
+#             'form': form
+#         }
+#         return render(request, 'clients/update.html', context)
