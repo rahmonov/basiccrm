@@ -40,3 +40,12 @@ class ClientCreateView(View):
             return redirect(reverse('clients:list'))
 
         return render(request, 'clients/create.html', context)
+
+
+class IndexView(View):
+    def get(self, request):
+        clients_data = Client.objects.all()
+        context = {
+            'clients': clients_data
+        }
+        return render(request, 'clients/index.html', context)
