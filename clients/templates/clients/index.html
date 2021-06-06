@@ -189,6 +189,8 @@
                                             <th>Phone</th>
                                             <th>Address</th>
                                             <th>Gender</th>
+                                            <th>Delete</th>
+                                            <th>Update</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -199,6 +201,8 @@
                                             <th>Phone</th>
                                             <th>Address</th>
                                             <th>Gender</th>
+                                            <th>Delete</th>
+                                            <th>Update</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -210,6 +214,8 @@
                                             <td>{{ client.phone_number }}</td>
                                             <td>{{ client.address }}</td>
                                             <td>{{ client.gender }}</td>
+                                            <td><a href="{% url 'clients:delete' client.id %}">Delete</a></td>
+                                            <td><a href="{% url 'clients:update'  client.id %}">Update</a></td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>

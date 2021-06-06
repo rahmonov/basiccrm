@@ -6,16 +6,17 @@ from clients.models import Client
 class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
-        fields = (
-            'business_owner',
-            'first_name',
-            'last_name',
-            'email',
-            'birthdate',
-            'phone_number',
-            'address',
-            'gender'
-        )
+        fields = '__all__'
+        # fields = (
+        #     'business_owner',
+        #     'first_name',
+        #     'last_name',
+        #     'email',
+        #     'birthdate',
+        #     'phone_number',
+        #     'address',
+        #     'gender'
+        # )
 
 
 # class ClientForm(forms.Form):
