@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -39,8 +40,8 @@ class ClientCreateView(View):
         if form.is_valid():
             form.save()
             return redirect(reverse('clients:list'))
-
-        return render(request, 'clients/create.html', context)
+        else:
+            return render(request, 'clients/create.html', context)
 
 
 class ClientDeleteView(View):
@@ -59,5 +60,43 @@ class ClientDeleteView(View):
             raise Http404()
 
         client.delete()
+        messages.success(request, 'Client successfully deleted')
 
         return redirect(reverse('clients:list'))
+
+
+class ClientUpdateView(View):
+    def get(self, request, id):
+        try:
+            client = Client.objects.get(pk=id)
+        except Client.DoesNotExist:
+            raise Http404()
+
+        form = ClientForm(instance=client)
+
+        context = {
+            'form': form
+        }
+
+        return render(request, 'clients/update.html', context)
+
+    def post(self, request, id):
+        try:
+            client = Client.objects.get(pk=id)
+        except Client.DoesNotExist:
+            raise Http404()
+
+        form = ClientForm(
+            instance=client,
+            data=request.POST
+        )
+
+        context = {
+            'form': form
+        }
+
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('clients:list'))
+
+        return render(request, 'clients/create.html', context)
