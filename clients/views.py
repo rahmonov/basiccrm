@@ -8,6 +8,13 @@ from django.views import View
 from clients.forms import ClientForm
 from clients.models import Client
 
+"""
+Homework
+
+1. Add ClientDetailView
+2. Tests for all views
+"""
+
 
 class ClientListView(View):
     def get(self, request):
