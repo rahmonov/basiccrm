@@ -36,7 +36,7 @@ class ClientCreateView(View):
 
         if form.is_valid():
             form.save()
-            return redirect(reverse('clients:list'))
+            return redirect(reverse('clients:index'))
 
         return render(request, 'clients/create.html', context)
 
@@ -82,7 +82,7 @@ def update(request, id):
     context = {
         'form': form
     }
-    return render(request, 'clients/update.html', context)
+    return render(request, 'clients/create.html', context)
 
 
 # TODO: clarify why class based view does not work with updating client
