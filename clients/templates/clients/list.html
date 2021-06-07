@@ -18,7 +18,7 @@
 
 {% for client in clients %}
 
-<p class="client-row">{{ client.first_name }} {{ client.last_name }}: {{ client.phone_number }}</p>
+<p class="client-row">{{ client.first_name }} {{ client.last_name }}: {{ client.phone_number }}      <a href="{% url 'clients:delete' client.id %}">Delete</a></p>
 
 {% endfor %}
 

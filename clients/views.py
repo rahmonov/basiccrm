@@ -1,3 +1,4 @@
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
@@ -40,3 +41,23 @@ class ClientCreateView(View):
             return redirect(reverse('clients:list'))
 
         return render(request, 'clients/create.html', context)
+
+
+class ClientDeleteView(View):
+    def get(self, request, id):
+        try:
+            client = Client.objects.get(pk=id)
+        except Client.DoesNotExist:
+            raise Http404()
+
+        return render(request, 'clients/delete-confirm.html', {'client': client})
+
+    def post(self, request, id):
+        try:
+            client = Client.objects.get(pk=id)
+        except Client.DoesNotExist:
+            raise Http404()
+
+        client.delete()
+
+        return redirect(reverse('clients:list'))
