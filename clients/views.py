@@ -27,6 +27,17 @@ class ClientListView(View):
         return render(request, 'clients/list.html', context)
 
 
+class ClientDetailedView(View):
+    def get(self, request, id):
+        client = Client.objects.get(pk=id)
+
+        context = {
+            'client': client
+        }
+
+        return render(request, 'clients/detailed_view.html', context)
+
+
 class ClientCreateView(View):
     def get(self, request):
         form = ClientForm()
@@ -107,3 +118,4 @@ class ClientUpdateView(View):
             return redirect(reverse('clients:list'))
 
         return render(request, 'clients/create.html', context)
+
