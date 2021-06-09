@@ -74,3 +74,11 @@ class ClientUpdateView(View):
         }
         return render(request, 'clients/update.html', context)
 
+
+class ClientDetailView(View):
+    def get(self, request, id):
+        client = get_object_or_404(Client, pk=id)
+        context = {
+            'client': client
+        }
+        return render(request, 'clients/detail.html', context)
