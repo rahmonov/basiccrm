@@ -187,7 +187,11 @@
                                             <td>{{ client.phone_number }}</td>
                                             <td>{{ client.address }}</td>
                                             <td>{{ client.gender }}</td>
-                                            <td><a href="{% url 'clients:delete' client.id %}">Delete</a></td>
+
+                                            <td>
+                                                <a href="{% url 'clients:delete' client.id %}">Delete</a>
+                                            </td>
+
                                             <td><a href="{% url 'clients:update'  client.id %}">Update</a></td>
                                         </tr>
                                     {% endfor %}

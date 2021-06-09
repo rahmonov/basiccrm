@@ -31,8 +31,8 @@ class ClientCreateView(View):
         if form.is_valid():
             form.save()
             return redirect(reverse("clients:index"))
-
-        return render(request, "clients/create.html", context)
+        else:
+            return render(request, "clients/create.html", context)
 
 
 class IndexView(View):
@@ -63,17 +63,7 @@ class ClientUpdateView(View):
         client = get_object_or_404(Client, pk=id)
         form = ClientForm(request.POST)
         if form.is_valid():
-            client.first_name = form.cleaned_data['first_name']
-            client.last_name = form.cleaned_data['last_name']
-            client.business_owner = form.cleaned_data['business_owner']
-            client.agent = form.cleaned_data['agent']
-            client.profile_picture = form.cleaned_data['profile_picture']
-            client.address = form.cleaned_data['address']
-            client.gender = form.cleaned_data['gender']
-            client.phone_number = form.cleaned_data['phone_number']
-            client.email = form.cleaned_data['email']
-            client.birthdate = form.cleaned_data['birthdate']
-            client.save()
+            form.save()
 
             return redirect(reverse('clients:index'))
 
@@ -81,30 +71,3 @@ class ClientUpdateView(View):
             'form': form
         }
         return render(request, 'clients/update.html', context)
-
-
-
-# def update(request, id):
-#     client = get_object_or_404(Client, pk=id)
-#
-#     if request.method == "POST":
-#         form = ClientForm(request.POST)
-#         if form.is_valid():
-#             client.first_name = form.cleaned_data["first_name"]
-#             client.last_name = form.cleaned_data["last_name"]
-#             client.business_owner = form.cleaned_data["business_owner"]
-#             client.agent = form.cleaned_data["agent"]
-#             client.profile_picture = form.cleaned_data["profile_picture"]
-#             client.address = form.cleaned_data["address"]
-#             client.gender = form.cleaned_data["gender"]
-#             client.phone_number = form.cleaned_data["phone_number"]
-#             client.email = form.cleaned_data["email"]
-#             client.birthdate = form.cleaned_data["birthdate"]
-#             client.save()
-#
-#             return redirect(reverse("clients:index"))
-#     else:
-#         form = ClientForm(instance=client)
-#
-#     context = {"form": form}
-#     return render(request, "clients/create.html", context)
