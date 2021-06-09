@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
@@ -7,13 +7,6 @@ from django.views import View
 
 from clients.forms import ClientForm
 from clients.models import Client
-
-"""
-Homework
-
-1. Add ClientDetailView
-2. Tests for all views
-"""
 
 
 class ClientListView(View):
