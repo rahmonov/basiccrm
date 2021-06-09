@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        .client-row {
+            background-color: #cdcdcd;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<h3>Clients:</h3>
+
+<a href="{% url 'clients:create' %}">Create a client</a><br>
+
+
+{% for client in clients %}
+
+<p class="client-row">{{ client.first_name }} {{ client.last_name }} {{ client.birthdate }} <a href="{% url 'clients:update' %}">Edit</a> / <a href="{% url 'clients:delete' %}">Delete</a></p>
+
+{% endfor %}
+
+</body>
+</html>
