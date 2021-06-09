@@ -6,15 +6,6 @@ from clients.forms import ClientForm
 from clients.models import Client
 
 
-class ClientListView(View):
-    def get(self, request):
-        clients = Client.objects.all()
-
-        context = {"clients": clients}
-
-        return render(request, "clients/list.html", context)
-
-
 class ClientCreateView(View):
     def get(self, request):
         form = ClientForm()
@@ -45,8 +36,16 @@ class IndexView(View):
 class ClientDeleteView(View):
     def get(self, request, id):
         client = get_object_or_404(Client, pk=id)
+        context = {
+            'client': client
+        }
+        return render(request=request, template_name='clients/delete_confirm.html', context=context)
+
+    def post(self, request, id):
+        client = get_object_or_404(Client, pk=id)
+
         client.delete()
-        return redirect(reverse("clients:index"))
+        return redirect(reverse('clients:index'))
 
 
 class ClientUpdateView(View):
@@ -61,7 +60,10 @@ class ClientUpdateView(View):
 
     def post(self, request, id):
         client = get_object_or_404(Client, pk=id)
-        form = ClientForm(request.POST)
+        form = ClientForm(
+            data=request.POST,
+            instance=client
+        )
         if form.is_valid():
             form.save()
 
@@ -71,3 +73,4 @@ class ClientUpdateView(View):
             'form': form
         }
         return render(request, 'clients/update.html', context)
+

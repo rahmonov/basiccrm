@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete</title>
+</head>
+<body>
+<h1>are you sure? you want to delete?</h1>
+<a href="{% url 'clients:index' %}">No</a>
+<form method="post">
+    {% csrf_token %}
+    <button>Yes</button>
+</form>
+</body>
+</html>
