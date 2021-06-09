@@ -26,6 +26,15 @@ class ClientListView(View):
 
         return render(request, 'clients/list.html', context)
 
+class ClientDetailedView(View):
+    def get(self, request, id):
+        client = Client.objects.get(pk=id)
+
+        context = {
+            'client': client
+        }
+
+        return render(request, 'clients/detail.html', context)
 
 class ClientCreateView(View):
     def get(self, request):
