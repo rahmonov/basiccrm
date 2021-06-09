@@ -9,16 +9,42 @@
             background-color: #cdcdcd;
             padding: 5px;
         }
+
+        .success {
+            background-color: green;
+        }
+
+        .error {
+            background-color: red;
+        }
+
+        .info {
+            background-color: yellow;
+        }
     </style>
 </head>
 <body>
+
+{% if messages %}
+
+    <ul>
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+
+{% endif %}
+
 <h3>Clients:</h3>
 
 <a href="{% url 'clients:create' %}">Create a client</a>
 
 {% for client in clients %}
 
-<p class="client-row">{{ client.first_name }} {{ client.last_name }}: {{ client.phone_number }}</p>
+    <p class="client-row">
+        {{ client.first_name }} {{ client.last_name }}: {{ client.phone_number }}
+        <a href="{% url 'clients:delete' client.id %}">Delete</a> / <a href="{% url 'clients:update' client.id %}">Update</a>
+    </p>
 
 {% endfor %}
 

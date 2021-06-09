@@ -4,3 +4,4 @@ Developers:
 - A.T.
 - F.B.
 - J.A.
+- K.T
