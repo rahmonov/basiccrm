@@ -107,3 +107,14 @@ class ClientUpdateView(View):
             return redirect(reverse('clients:list'))
 
         return render(request, 'clients/create.html', context)
+
+
+class ClientDetailView(View):
+    def get(self, request, id):
+        client = Client.objects.get(pk=id)
+
+        context = {
+            'client': client
+        }
+
+        return render(request, 'clients/information.html', context)

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+</head>
+<body>
+    <a href="{% url 'clients:list' %}">Clients list</a>
+    <br>
+    <h3>Client: {{ client.first_name }}</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Birthdate</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone number</th>
+          <th scope="col">Address</th>
+          <th scope="col">Gender</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>{{ client.first_name }} {{ client.last_name }}</td>
+          <td>{{ client.birthdate }}</td>
+          <td>{{ client.email }}</td>
+          <td>{{ client.phone_number }}</td>
+          <td>{{ client.address }}</td>
+          <td>{{ client.gender }}</td>
+      </tbody>
+    </table>
+
+</body>
+</html>
