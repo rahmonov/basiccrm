@@ -1,2 +1,5 @@
 Django==3.2.4
 Pillow==8.2.0
+django-phonenumber-field==5.2.0
+phonenumbers==8.12.24
+Babel==2.9.1
