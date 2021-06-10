@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %} Basic CRM {% endblock %}</title>
+
+  <style>
+      .client-row {
+          background-color: #cdcdcd;
+          padding: 5px;
+      }
+
+      .success {
+          background-color: green;
+      }
+
+      .error {
+          background-color: red;
+      }
+
+      .info {
+          background-color: yellow;
+      }
+      table.blueTable {
+          border: 1px solid #1C6EA4;
+          background-color: #EEEEEE;
+          width: 50%;
+          text-align: left;
+          border-collapse: collapse;
+      }
+
+      table.blueTable td, table.blueTable th {
+          border: 1px solid #AAAAAA;
+          padding: 3px 2px;
+      }
+
+      table.blueTable tbody td {
+          font-size: 13px;
+      }
+
+      table.blueTable tr:nth-child(even) {
+          background: #D0E4F5;
+      }
+
+      table.blueTable thead {
+          background: #1C6EA4;
+          background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+          background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+          background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+          border-bottom: 2px solid #444444;
+      }
+
+      table.blueTable thead th {
+          font-size: 15px;
+          font-weight: bold;
+          color: #FFFFFF;
+          border-left: 2px solid #D0E4F5;
+      }
+
+      table.blueTable thead th:first-child {
+          border-left: none;
+      }
+  </style>
+</head>
+<body>
+
+{% block messages %}
+  {% if messages %}
+
+    <ul>
+      {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}
+
+</body>
+</html>

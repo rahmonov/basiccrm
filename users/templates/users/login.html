@@ -1,29 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login Page</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-{% if messages %}
+{% block content %}
 
-    <ul>
-        {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
+    <h1>Login</h1>
 
-{% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
 
-<h1>Login</h1>
+        <button>Log In</button>
+    </form>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-
-    <button>Log In</button>
-</form>
-
-</body>
-</html>
+{% endblock %}

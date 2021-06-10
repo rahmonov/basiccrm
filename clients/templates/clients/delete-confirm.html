@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Delete Confirmation</title>
-</head>
-<body>
+{% block content %}
+    <h1>Are you sure you want to delete {{ client }}?</h1>
 
-<h1>Are you sure you want to delete {{ client }}?</h1>
+    <a href="{% url 'clients:list' %}"><button>No</button></a>
 
-<a href="{% url 'clients:list' %}"><button>No</button></a>
-
-<form method="post">
-    {% csrf_token %}
-    <button>Yes</button>
-</form>
-
-</body>
-</html>
+    <form method="post">
+        {% csrf_token %}
+        <button>Yes</button>
+    </form>
+{% endblock %}

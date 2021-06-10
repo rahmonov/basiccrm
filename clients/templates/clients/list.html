@@ -1,52 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+{% extends 'base.html' %}
 
-    <style>
-        .client-row {
-            background-color: #cdcdcd;
-            padding: 5px;
-        }
+{% block content %}
+    <h3>Clients:</h3>
 
-        .success {
-            background-color: green;
-        }
+    <a href="{% url 'clients:create' %}">Create a client</a>
 
-        .error {
-            background-color: red;
-        }
+    {% for client in clients %}
 
-        .info {
-            background-color: yellow;
-        }
-    </style>
-</head>
-<body>
+        <p class="client-row">
+            {{ client.first_name }} {{ client.last_name }}: {{ client.phone_number }}
+            <a href="{% url 'clients:delete' client.id %}">Delete</a> / <a href="{% url 'clients:update' client.id %}">Update</a> / <a href="{% url 'clients:detail' client.id %}">View</a>
+        </p>
 
-{% if messages %}
+    {% endfor %}
 
-    <ul>
-        {% for message in messages %}
-            <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
-
-{% endif %}
-
-<h3>Clients:</h3>
-
-<a href="{% url 'clients:create' %}">Create a client</a>
-
-{% for client in clients %}
-
-    <p class="client-row">
-        {{ client.first_name }} {{ client.last_name }}: {{ client.phone_number }}
-        <a href="{% url 'clients:delete' client.id %}">Delete</a> / <a href="{% url 'clients:update' client.id %}">Update</a> / <a href="{% url 'clients:detail' client.id %}">View</a>
-    </p>
-
-{% endfor %}
-
-</body>
-</html>
+{% endblock %}
