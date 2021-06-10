@@ -1,5 +1,7 @@
-from django.db import models
+import datetime
 
+from django.db import models
+from django.utils import timezone
 from users.models import Agent, BusinessOwner
 
 
@@ -24,3 +26,6 @@ class Client(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    def is_18_years_old(self):
+        return (timezone.now() - datetime.timedelta(days=6588)) >= self.birthdate
