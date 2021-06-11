@@ -45,7 +45,7 @@ class ClientDeleteView(View):
         client = get_object_or_404(Client, pk=id)
 
         client.delete()
-        return redirect(reverse('clients:index'))
+        return redirect('clients:index')
 
 
 class ClientUpdateView(View):
