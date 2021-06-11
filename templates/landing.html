@@ -1,12 +1,15 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Landing Page</title>
+</head>
+<body>
 
-{% block title %}
-    Landing Page
-{% endblock %}
+<h1>Landing Page</h1>
 
-{% block content %}
-    <h1>Landing Page</h1>
+<a href="{% url 'users:login' %}">Log In</a>  <br>
+<a href="{% url 'users:register' %}">Sign Up</a>
 
-    <a href="{% url 'users:login' %}">Log In</a>  <br>
-    <a href="{% url 'users:register' %}">Sign Up</a>
-{% endblock %}
+</body>
+</html>
