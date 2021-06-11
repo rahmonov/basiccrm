@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from users.models import Agent, BusinessOwner
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Client(models.Model):
@@ -19,7 +20,7 @@ class Client(models.Model):
     last_name = models.CharField(max_length=50)
     birthdate = models.DateTimeField()
     email = models.EmailField()
-    phone_number = models.CharField(max_length=20)
+    phone_number = PhoneNumberField()
     address = models.CharField(max_length=255)
     gender = models.CharField(choices=CHOICES, max_length=1)
     profile_picture = models.ImageField(null=True, blank=True)

@@ -1,5 +1,10 @@
 from django import forms
 from clients.models import Client
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
+
+
+class CustomDateTimeInput(forms.DateTimeInput):
+    input_type = 'date'
 
 
 class ClientForm(forms.ModelForm):
@@ -17,20 +22,12 @@ class ClientForm(forms.ModelForm):
             'gender',
             'profile_picture'
         )
+        widgets = {
+            'birthdate': CustomDateTimeInput(),
+            'phone_number': PhoneNumberPrefixWidget(initial="UZ")
+        }
 
     def __init__(self, *args, **kwargs):
         super(ClientForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
-
-
-
-
-# class ClientForm(forms.Form):
-#     first_name = forms.CharField()
-#     last_name = forms.CharField()
-#     email = forms.EmailField()
-#     birthdate = forms.DateTimeField()
-#     phone_number = forms.CharField()
-#     address = forms.CharField()
-#     gender = forms.ChoiceField(choices=Client.CHOICES)
