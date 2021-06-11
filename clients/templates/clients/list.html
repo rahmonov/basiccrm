@@ -43,7 +43,7 @@
 
     <p class="client-row">
         {{ client.first_name }} {{ client.last_name }}: {{ client.phone_number }}
-        <a href="{% url 'clients:delete' client.id %}">Delete</a> / <a href="{% url 'clients:update' client.id %}">Update</a> / <a href="{% url 'clients:information' client.id %}">View</a>
+        <a href="{% url 'clients:delete' client.id %}">Delete</a> / <a href="{% url 'clients:update' client.id %}">Update</a> / <a href="{% url 'clients:detail' client.id %}">View</a>
     </p>
 
 {% endfor %}

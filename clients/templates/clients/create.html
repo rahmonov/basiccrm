@@ -6,6 +6,12 @@
 </head>
 <body>
 
+{% if messages %}
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+{% endif %}
+
 <a href="{% url 'clients:list' %}">Clients Page</a>
 
 <h3>Create a client:</h3>
