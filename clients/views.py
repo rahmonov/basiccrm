@@ -4,20 +4,16 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from django.views import View
+from django.views.generic import ListView
 
 from clients.forms import ClientForm
 from clients.models import Client
 
 
-class ClientListView(View):
-    def get(self, request):
-        clients = Client.objects.all()
-
-        context = {
-            'clients': clients
-        }
-
-        return render(request, 'clients/list.html', context)
+class ClientListView(ListView):
+    queryset = Client.objects.all()
+    template_name = 'clients/list.html'
+    context_object_name = 'clients'
 
 
 class ClientDetailedView(View):
