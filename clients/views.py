@@ -21,7 +21,8 @@ class ClientCreateView(View):
 
         if form.is_valid():
             form.save()
-            return redirect(reverse("clients:index"))
+            r = redirect("clients:index")
+            return r
         else:
             return render(request, "clients/create.html", context)
 

@@ -1,5 +1,5 @@
 import datetime
-from django.test import TestCase
+from django.test import TestCase, Client as HttpClient
 from users.models import User, BusinessOwner, Agent
 from clients.models import Client
 from django.utils import timezone
@@ -29,6 +29,7 @@ def create_client(owner, agent, birthdate):
         phone_number="5164165165",
         address="sigfjvnlm",
         gender="M",
+        profile_picture=""
     )
 
 
@@ -81,6 +82,18 @@ class ClientCreateViewTests(TestCase):
         self.assertContains(response, "Create a client:")
 
     def test_client_create_html_post(self):
-        url = reverse('clients:create', args=())
+        # TODO ask question post request redirect issue
+        user, owner, agent = create_users()
+        url = reverse('clients:create')
+        birth_date = timezone.now() - datetime.timedelta(days=6588)
+        # created data for post from the existing client just to avoid creating whole client.
+        client = create_client(owner, agent, birth_date)
+        client_dict = client.__dict__
+        client_dict.pop("_state")
+        client_dict.pop("id")
 
+        response = self.client.post(url, client_dict, follow=True)
+        print(response.status_code)
+        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, expected_url='index/', status_code=302, target_status_code=200, fetch_redirect_response=True)
 
