@@ -1,6 +1,6 @@
 from django.urls import path
 
-from clients.views import ClientCreateView, IndexView, ClientDeleteView, ClientUpdateView, ClientDetailView
+from clients.views import ClientCreateView, IndexView, ClientDeleteView, ClientDetailView, ClientUpdateView
 
 app_name = 'clients'
 urlpatterns = [
