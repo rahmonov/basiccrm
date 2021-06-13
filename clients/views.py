@@ -1,6 +1,5 @@
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
-from django.views import View
+
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
 
@@ -22,19 +21,11 @@ class IndexView(ListView):
     context_object_name = 'clients'
 
 
-class ClientDeleteView(View):
-    def get(self, request, id):
-        client = get_object_or_404(Client, pk=id)
-        context = {
-            'client': client
-        }
-        return render(request=request, template_name='clients/delete_confirm.html', context=context)
-
-    def post(self, request, id):
-        client = get_object_or_404(Client, pk=id)
-
-        client.delete()
-        return redirect('clients:index')
+class ClientDeleteView(DeleteView):
+    model = Client
+    template_name = 'clients/delete_confirm.html'
+    success_url = reverse_lazy('clients:index')
+    pk_url_kwarg = 'id'
 
 
 class ClientUpdateView(UpdateView):
