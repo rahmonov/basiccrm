@@ -1,4 +1,4 @@
-from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
@@ -11,13 +11,13 @@ from clients.forms import ClientForm
 from clients.models import Client
 
 
-class ClientListView(ListView):
+class ClientListView(LoginRequiredMixin, ListView):
     queryset = Client.objects.all()
     template_name = 'clients/list.html'
     context_object_name = 'clients'
 
 
-class ClientDetailedView(View):
+class ClientDetailedView(LoginRequiredMixin, View):
     def get(self, request, id):
         client = Client.objects.get(pk=id)
 
@@ -28,7 +28,7 @@ class ClientDetailedView(View):
         return render(request, 'clients/detailed_view.html', context)
 
 
-class ClientCreateView(View):
+class ClientCreateView(LoginRequiredMixin, View):
     def get(self, request):
         form = ClientForm()
 
@@ -52,14 +52,14 @@ class ClientCreateView(View):
             return render(request, 'clients/create.html', context)
 
 
-class ClientDeleteView(DeleteView):
+class ClientDeleteView(LoginRequiredMixin, DeleteView):
     model = Client
     template_name = 'clients/delete-confirm.html'
     success_url = reverse_lazy('clients:list')
     pk_url_kwarg = 'id'
 
 
-class ClientUpdateView(View):
+class ClientUpdateView(LoginRequiredMixin, View):
     def get(self, request, id):
         try:
             client = Client.objects.get(pk=id)
