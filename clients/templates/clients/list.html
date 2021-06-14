@@ -1,17 +1,53 @@
 {% extends 'base.html' %}
-
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
 
 {% block content %}
-    <h3>Clients:</h3>
+    <div class="container-fluid my-2">
+        <div class="row my-1">
+            <div class="col">
+                <h4>Clients:</h4>
+            </div>
+        </div>
+        <div class="row my-1">
+            <div class="col">
+                <a class="btn btn-primary btn-sm" role="button" href="{% url 'clients:create' %}">Create</a>
+            </div>
+        </div>
+        <div class="row my-1">
+            <div class="col">
 
-    <a href="{% url 'clients:create' %}">Create a client</a>
+                <table class="table table-hover">
 
-    {% for client in clients %}
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">First</th>
+                      <th scope="col">Last</th>
+                      <th scope="col">Phone number</th>
+                    </tr>
+                  </thead>
+                    {% for client in clients %}
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>{{ client.first_name }}</td>
+                      <td>{{ client.first_name }}</td>
+                      <td>{{ client.phone_number }}</td>
+                    </tr>
+                  </tbody>
+                    {% endfor %}
+                </table>
+{#               <p class="client-row">#}
+{#                    {{ client.first_name }} {{ client.last_name }}: {{ client.phone_number }}#}
+{#                    <a href="{% url 'clients:delete' client.id %}">Delete</a> / <a#}
+{#                        href="{% url 'clients:update' client.id %}">Update</a>#}
+{#                    / <a href="{% url 'clients:detail' client.id %}">View</a>#}
+{#                </p>#}
 
-        <p class="client-row">
-            {{ client.first_name }} {{ client.last_name }}: {{ client.phone_number }}
-            <a href="{% url 'clients:delete' client.id %}">Delete</a> / <a href="{% url 'clients:update' client.id %}">Update</a> / <a href="{% url 'clients:detail' client.id %}">View</a>
-        </p>
+            </div>
+        </div>
 
-    {% endfor %}
+    </div>
 {% endblock %}

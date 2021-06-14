@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
 
 {% block content %}
     <a href="{% url 'clients:list' %}">Clients Page</a>
