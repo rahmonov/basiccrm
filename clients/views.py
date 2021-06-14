@@ -1,10 +1,11 @@
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from django.views import View
 from django.views.generic import ListView
+from django.views.generic.edit import DeleteView
 
 from clients.forms import ClientForm
 from clients.models import Client
@@ -51,25 +52,11 @@ class ClientCreateView(View):
             return render(request, 'clients/create.html', context)
 
 
-class ClientDeleteView(View):
-    def get(self, request, id):
-        try:
-            client = Client.objects.get(pk=id)
-        except Client.DoesNotExist:
-            raise Http404()
-
-        return render(request, 'clients/delete-confirm.html', {'client': client})
-
-    def post(self, request, id):
-        try:
-            client = Client.objects.get(pk=id)
-        except Client.DoesNotExist:
-            raise Http404()
-
-        client.delete()
-        messages.success(request, 'Client successfully deleted')
-
-        return redirect(reverse('clients:list'))
+class ClientDeleteView(DeleteView):
+    model = Client
+    template_name = 'clients/delete-confirm.html'
+    success_url = reverse_lazy('clients:list')
+    pk_url_kwarg = 'id'
 
 
 class ClientUpdateView(View):
