@@ -96,15 +96,15 @@
 
 <div class="container pt-4">
     {% block message %}
-    {% if messages %}
+        {% if messages %}
 
-    <ul>
-        {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
 
-    {% endif %}
+        {% endif %}
     {% endblock %}
 
     {% block content %}
