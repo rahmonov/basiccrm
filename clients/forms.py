@@ -17,6 +17,9 @@ class ClientForm(forms.ModelForm):
             'address',
             'gender'
         )
+        widgets = {
+            'birthdate': forms.DateInput(attrs={'type': 'date'})
+        }
 
     def clean_birthdate(self):
         cleaned_data = self.clean()

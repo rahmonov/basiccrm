@@ -4,7 +4,7 @@ from django.views import View
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 
-from users.forms import CustomUserCreationForm
+from users.forms import CustomUserCreationForm, CustomLoginForm
 from users.models import User
 
 
@@ -30,7 +30,7 @@ class RegisterView(View):
 
 class LoginView(View):
     def get(self, request):
-        form = AuthenticationForm()
+        form = CustomLoginForm()
         context = {
             'form': form
         }
@@ -38,7 +38,7 @@ class LoginView(View):
         return render(request, template_name='users/login.html', context=context)
 
     def post(self, request):
-        form = AuthenticationForm(data=request.POST)
+        form = CustomLoginForm(data=request.POST)
 
         if form.is_valid():
             user = User.objects.get(username=form.cleaned_data['username'])
