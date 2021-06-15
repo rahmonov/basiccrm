@@ -4,11 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 
 from django.views import View
-<<<<<<< HEAD
 from django.views.generic import ListView, CreateView
-=======
-from django.views.generic import ListView
->>>>>>> d14e86d963a2d6ac3fcc21325dead42013e0408b
 from django.views.generic.edit import DeleteView
 
 from clients.forms import ClientForm
@@ -43,7 +39,6 @@ class ClientDetailedView(LoginRequiredMixin, View):
 
 
 class ClientCreateView(LoginRequiredMixin, View):
-<<<<<<< HEAD
     queryset = Client.objects.all()
     template_name = 'clients/create.html'
     form_class = ClientForm
@@ -54,30 +49,6 @@ class ClientCreateView(LoginRequiredMixin, View):
 
     def get_success_url(self):
         return reverse('clients:list')
-=======
-    def get(self, request):
-        form = ClientForm()
-
-        context = {
-            'form': form
-        }
-
-        return render(request, 'clients/create.html', context)
-
-    def post(self, request):
-        form = ClientForm(data=request.POST)
-
-        context = {
-            'form': form
-        }
-
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('clients:list'))
-        else:
-            return render(request, 'clients/create.html', context)
-
->>>>>>> d14e86d963a2d6ac3fcc21325dead42013e0408b
 
 class ClientDeleteView(LoginRequiredMixin, DeleteView):
     model = Client
