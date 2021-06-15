@@ -1,99 +1,99 @@
-import datetime
-from django.test import TestCase, Client as HttpClient
-from users.models import User, BusinessOwner, Agent
+from .base import BaseTestCase
+from django.urls import reverse_lazy, reverse
 from clients.models import Client
-from django.utils import timezone
-from django.shortcuts import reverse
 
 
-def create_user():
-    return User(first_name="test_user", password="45154515FFF")
-
-
-def create_business_owner(user):
-    return BusinessOwner(user=user)
-
-
-def create_agent(user, owner):
-    return Agent(user=user, business_owner=owner)
-
-
-def create_client(owner, agent, birthdate):
-    return Client(
-        business_owner=owner,
-        agent=agent,
-        first_name="fayyozbek",
-        last_name="berdiyorov",
-        birthdate=birthdate,
-        email="dsfkljd@gmail.com",
-        phone_number="5164165165",
-        address="sigfjvnlm",
-        gender="M",
-        profile_picture=""
-    )
-
-
-def create_users():
-    user = create_user()
-    user.save()
-    owner = create_business_owner(user)
-    owner.save()
-    agent = create_agent(user, owner)
-    agent.save()
-
-    return user, owner, agent
-
-
-class ClientModelTests(TestCase):
-    def test_client_creation(self):
-        user, owner, agent = create_users()
-        birth_date = timezone.now()
-        client = create_client(owner, agent, birth_date)
-        client.save()
-        self.assertEqual(client, Client.objects.first())
-
-    def test_is_client_18_years_old_with_datenow(self):
-        user, owner, agent = create_users()
-        birth_date = timezone.now()
-        client = create_client(owner, agent, birth_date)
-        client.save()
-        self.assertEqual(client.is_18_years_old(), False)
-
-    def test_client_age_with_future_date(self):
-        user, owner, agent = create_users()
-        birth_date = timezone.now() + datetime.timedelta(days=3000)
-        client = create_client(owner, agent, birth_date)
-        client.save()
-        self.assertEqual(client.is_18_years_old(), False)
-
-    def test_client_age_with_18_years(self):
-        user, owner, agent = create_users()
-        birth_date = timezone.now() - datetime.timedelta(days=6588)
-        client = create_client(owner, agent, birth_date)
-        client.save()
-        self.assertEqual(client.is_18_years_old(), True)
-
-
-class ClientCreateViewTests(TestCase):
-    def test_client_create_html_page_renders(self):
-        url = reverse("clients:create")
+class ClientViewTestCase(BaseTestCase):
+    def test_list_of_clients(self):
+        """Test that the list of clients in dashboard is rendering"""
+        url = reverse_lazy("clients:index")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Create a client:")
+        self.assertContains(response, self.my_client.first_name)
+        self.assertContains(response, self.my_client.email)
 
-    def test_client_create_html_post(self):
-        # TODO ask question post request redirect issue
-        user, owner, agent = create_users()
+    def test_client_create_view_template_is_rendering(self):
+        """Test that the template for create view is being rendered"""
+
         url = reverse('clients:create')
-        birth_date = timezone.now() - datetime.timedelta(days=6588)
-        # created data for post from the existing client just to avoid creating whole client.
-        client = create_client(owner, agent, birth_date)
-        client_dict = client.__dict__
-        client_dict.pop("_state")
-        client_dict.pop("id")
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, 200)
 
-        response = self.client.post(url, client_dict, follow=True)
-        print(response.status_code)
-        self.assertEqual(response.status_code, 200)
-        self.assertRedirects(response, expected_url='index/', status_code=302, target_status_code=200, fetch_redirect_response=True)
+    def test_client_create_post_request(self):
+        """Test that creating client with post request is working"""
+        url = reverse_lazy('clients:create')
+        payload = {
+            'business_owner': self.business_owner.pk,
+            'first_name': "First",
+            'last_name': "Last",
+            'birthdate': "05/05/2001",
+            'email': "user@gmail.com",
+            'phone_number_0': "+998",
+            'phone_number_1': "915228512",
+            'address': "Tashkent",
+            'gender': "M",
+        }
+
+        response = self.client.post(url, data=payload)
+        print(response.content)
+        self.assertEqual(Client.objects.count(), 2)
+        self.assertEqual(response.status_code, 302)
+        expected_url = reverse_lazy('clients:index')
+        self.assertRedirects(response, expected_url=expected_url, status_code=302, target_status_code=200)
+
+    def test_delete_template_is_rendering(self):
+        """Test that the delete get request is working and template is being rendered"""
+        url = reverse('clients:delete', args=[self.my_client.id])
+        res = self.client.get(url)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, str(self.my_client))
+
+    def test_client_delete_view(self):
+        """Test that client delete view deletes the client"""
+
+        url_delete = reverse('clients:delete', args=[self.my_client.id])
+        response = self.client.post(url_delete)
+
+        self.assertEqual(list(Client.objects.all()), [])
+
+    def test_client_update_view_template_is_rendering(self):
+        """Test that the template for client updating is being rendered
+         and the actual data is present in the form"""
+
+        url = reverse('clients:update', args=[self.my_client.id])
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, self.my_client.first_name)
+        self.assertContains(res, self.my_client.email)
+
+    def test_update_view_is_updating_client(self):
+        """Test that checks if the updated client is being saved into the database"""
+
+        url = reverse('clients:update', args=[self.my_client.id])
+        payload = {
+            'business_owner': self.business_owner.pk,
+            'first_name': "Fayyoz",
+            'last_name': "Last",
+            'birthdate': "05/05/2001",
+            'email': "fayyoz@gmail.com",
+            'phone_number_0': "+998",
+            'phone_number_1': "915228512",
+            'address': "Tashkent",
+            'gender': "M",
+        }
+        res = self.client.post(url, data=payload, follow=True)
+        self.assertRedirects(res, reverse('clients:index'), status_code=302, target_status_code=200)
+        self.assertEqual(Client.objects.first().first_name, payload['first_name'])
+
+    def test_client_detail_view(self):
+        """Test that the client detail view is being rendered"""
+
+        url = reverse('clients:detail', args=[self.my_client.id])
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, self.my_client.first_name)
+
+
+
 
