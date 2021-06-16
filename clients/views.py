@@ -49,7 +49,7 @@ class ClientCreateView(LoginRequiredMixin, View):
         return render(request, 'clients/create.html', context)
 
     def post(self, request):
-        form = ClientForm(data=request.POST)
+        form = ClientForm(data=request.POST, files=request.FILES)
 
         context = {
             'form': form
@@ -97,7 +97,8 @@ class ClientUpdateView(LoginRequiredMixin, View):
 
         form = ClientForm(
             instance=client,
-            data=request.POST
+            data=request.POST,
+            files=request.FILES
         )
 
         context = {

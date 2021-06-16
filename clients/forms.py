@@ -14,7 +14,8 @@ class ClientForm(forms.ModelForm):
             'birthdate',
             'phone_number',
             'address',
-            'gender'
+            'gender',
+            'profile_picture'
         )
         widgets = {
             'birthdate': forms.DateInput(attrs={'type': 'date'})
