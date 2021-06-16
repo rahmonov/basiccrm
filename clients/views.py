@@ -16,9 +16,16 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
 
 
 class IndexView(LoginRequiredMixin, ListView):
-    queryset = Client.objects.all()
     template_name = 'clients/index.html'
     context_object_name = 'clients'
+
+    def get_queryset(self):
+        if self.request.user.is_agent():
+            return Client.objects.filter(agent=self.request.user.agent)
+        elif self.request.user.is_business_owner():
+            return Client.objects.filter(business_owner=self.request.user.businessowner)
+        else:
+            return Client.objects.all()
 
 
 class ClientDeleteView(LoginRequiredMixin, DeleteView):
