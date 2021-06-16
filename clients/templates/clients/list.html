@@ -1,32 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+{% extends 'base.html' %}
 
-    <style>
-        .client-row {
-            background-color: #cdcdcd;
-            padding: 5px;
-        }
 
-        .success {
-            background-color: green;
-        }
+{% block content %}
+    <h3>Clients:</h3>
 
-        .error {
-            background-color: red;
-        }
+    <a href="{% url 'clients:create' %}">Create a client</a>
 
-        .info {
-            background-color: yellow;
-        }
-    </style>
-</head>
-<body>
+    {% for client in clients %}
 
-{% if messages %}
+        <p class="client-row">
+            {{ client.first_name }} {{ client.last_name }}: {{ client.phone_number }}
+            <a href="{% url 'clients:delete' client.id %}">Delete</a> / <a href="{% url 'clients:update' client.id %}">Update</a> / <a href="{% url 'clients:detail' client.id %}">View</a>
+        </p>
 
+<<<<<<< HEAD
     <ul>
         {% for message in messages %}
             <li class="{{ message.tags }}">{{ message }}</li>
@@ -50,3 +37,7 @@
 
 </body>
 </html>
+=======
+    {% endfor %}
+{% endblock %}
+>>>>>>> 0abbe41f3942e2c930b958d303d3cc7630c51ca5

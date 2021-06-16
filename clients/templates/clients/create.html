@@ -1,22 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create a client</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
-<a href="{% url 'clients:list' %}">Clients Page</a>
+{% block content %}
+    <h3>Create a client:</h3>
 
-<h3>Create a client:</h3>
+    <div class="row">
+        <div class="col-6">
+            <form method="post">
+                {% csrf_token %}
+                {{ form | crispy }}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-
-    <button>Submit</button>
-</form>
-
-
-</body>
-</html>
+                <button class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

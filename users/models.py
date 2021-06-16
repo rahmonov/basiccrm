@@ -3,7 +3,11 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    pass
+    def is_agent(self):
+        return hasattr(self, 'agent')
+
+    def is_business_owner(self):
+        return hasattr(self, 'businessowner')
 
 
 class BusinessOwner(models.Model):
