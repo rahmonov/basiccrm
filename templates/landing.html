@@ -1,15 +1,41 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Landing Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Home</title>
+
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'landing.css' %}">
+
 </head>
-<body>
 
-<h1>Landing Page</h1>
+<body class="text-center">
 
-<a href="{% url 'users:login' %}">Log In</a>  <br>
-<a href="{% url 'users:register' %}">Sign Up</a>
+    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+      <header class="masthead mb-auto">
+        <div class="inner">
+
+          <h1 class="logo">MyClients</h1>
+          <nav class="nav nav-masthead justify-content-center">
+            <a class=" nav-link active" href="#">Home</a>
+          </nav>
+        </div>
+      </header>
+
+      <main role="main" class="inner cover">
+        <h1 class="desc-1">Create Your Own CRM!</h1>
+        <p class="desc-2">MyClients CRM platform is designed to help businesses and organizations to manage their clients.</p>
+        <p class="lead">
+          <a href="{% url 'users:login' %}" class="btn btn-lg btn-primary">Sign in</a>
+          <a href="{% url 'users:register' %}" class="btn btn-lg btn-secondary">Sign up</a>
+        </p>
+      </main>
+    </div>
 
 </body>
 </html>
