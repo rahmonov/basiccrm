@@ -1,23 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>signin</title>
-</head>
-<body>
+{% extends 'pages/base.html' %}
+{% load crispy_forms_tags %}
 
-{% if messages %}
-    <ul>
-    {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-    {% endfor %}
-    </ul>
-{% endif %}
+{% block title %}
+<title>Log in</title>
+{% endblock %}
 
-<form method="post">
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+    <h1>Sign in</h1>
+<div class="row">
+<div class="col-5">
+    <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button>Sign in</button>
+    {{ form | crispy }}
+    <button type="submit" class="btn btn-primary">Sign in</button>
 </form>
-</body>
-</html>
+
+</div>
+</div>
+
+
+{% endblock %}

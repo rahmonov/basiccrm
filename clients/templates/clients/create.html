@@ -1,5 +1,5 @@
 {% extends 'pages/base.html' %}
-
+{% load crispy_forms_tags %}
 
 {% load static %}
 
@@ -10,77 +10,19 @@
 
 
 {% block content %}
-    <h1>HELLO</h1>
-    {{ form.errors }}
-    <div class="content-body">
+
 <a class="btn btn-outline-secondary mb-4" href="{% url 'clients:index' %}">Clients Page</a>
 
     <h3>Create a client:</h3>
-
+<div class="row">
+<div class="col-6">
 <form  method="post">
     {% csrf_token %}
 
-    <div class="input-group mb-3 w-75">
-          <span class="input-group-text">Business Owner</span>
-    {{ form.business_owner }}
-        {{ form.business_owner.errors }}
-    </div>
-
- <div class="input-group mb-3 w-75">
-          <span class="input-group-text">Agent</span>
-    {{ form.agent }}
-        {{ form.agent.errors }}
-    </div>
-
- <div class="input-group mb-3 w-75">
-          <span class="input-group-text">First Name</span>
-    {{ form.first_name }}
-        {{ form.first_name.errors }}
-    </div>
-
- <div class="input-group mb-3 w-75">
-          <span class="input-group-text">Last Name</span>
-    {{ form.last_name }}
-        {{ form.last_name.errors }}
-    </div>
-
- <div class="input-group mb-3 w-75">
-          <span class="input-group-text">Birthdate</span>
-    {{ form.birthdate }}
-        {{ form.birthdate.errors }}
-    </div>
-
- <div class="input-group mb-3 w-75">
-          <span class="input-group-text">Email</span>
-    {{ form.email }}
-        {{ form.email.errors }}
-    </div>
-
- <div class="input-group mb-3 w-75">
-          <span class="input-group-text">Phone Number</span>
-    {{ form.phone_number }}
-        {{ form.phone_number.errors }}
-    </div>
-
- <div class="input-group mb-3 w-75">
-          <span class="input-group-text">Address</span>
-    {{ form.address }}
-        {{ form.address.errors }}
-    </div>
-
- <div class="input-group mb-3 w-75">
-          <span class="input-group-text">Gender</span>
-    {{ form.gender }}
-        {{ form.gender.errors }}
-    </div>
-
- <div class="input-group mb-3 w-75">
-          <span class="input-group-text">Profile Picture</span>
-    {{ form.profile_picture }}
-        {{ form.profile_picture.errors }}
-    </div>
+    {{ form | crispy  }}
 
     <input class="btn btn-primary btn-lg w-25" type="submit" value="Submit">
 </form>
-    </div>
+</div>
+</div>
 {% endblock %}
