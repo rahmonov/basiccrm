@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 
 from django.views import View
 from django.views.generic import ListView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, UpdateView
 
 from clients.forms import ClientForm
 from clients.models import Client
@@ -77,7 +77,7 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('clients:list')
     pk_url_kwarg = 'id'
 
-
+'''
 class ClientUpdateView(LoginRequiredMixin, View):
     def get(self, request, id):
         try:
@@ -113,4 +113,9 @@ class ClientUpdateView(LoginRequiredMixin, View):
             return redirect(reverse('clients:list'))
 
         return render(request, 'clients/create.html', context)
-
+'''
+class ClientUpdateView(UpdateView):
+    model = Client
+    form_class = ClientForm
+    template_name = 'clients/update.html'
+    success_url = reverse_lazy('clients:list')
