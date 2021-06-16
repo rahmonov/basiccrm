@@ -56,7 +56,12 @@ class ClientCreateView(LoginRequiredMixin, View):
         }
 
         if form.is_valid():
-            form.save()
+            business_owner = request.user.businessowner
+
+            client = form.save(commit=False)
+            client.business_owner = business_owner
+            client.save()
+
             return redirect(reverse('clients:list'))
         else:
             return render(request, 'clients/create.html', context)
