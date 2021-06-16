@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 
 from .base import BaseTestCase
@@ -30,3 +31,21 @@ class ClientViewTestCase(BaseTestCase):
 
         self.assertEqual(Client.objects.count(), 2)
         self.assertEqual(response.status_code, 200)
+
+    def test_delete_view_GET_method(self):
+        """Test that client view is working and page is rendered"""
+        self.client.login(username=self.user.username, password='testpass')
+        link = reverse('clients:delete', args=[self.my_client.id])
+        res = self.client.get(link)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, str(self.my_client))
+
+    def test_delete_view_POST_method(self):
+        """Test that client is deleted """
+        self.client.login(username=self.user.username, password='testpass')
+        link = reverse('clients:delete', args=[self.my_client.id])
+        res = self.client.post(link)
+        self.assertEqual(res.status_code, 302)
+        with self.assertRaises(ObjectDoesNotExist):
+            Client.objects.get(pk=self.my_client.id)
