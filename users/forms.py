@@ -1,3 +1,5 @@
+from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import UsernameField
 
@@ -9,3 +11,7 @@ class CustomUserCreationForm(UserCreationForm):
         model = CustomUser
         fields = ("username",)
         field_classes = {'username': UsernameField}
+
+
+class CustomLoginForm(AuthenticationForm):
+    pass
