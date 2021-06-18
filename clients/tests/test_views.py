@@ -28,7 +28,6 @@ class ClientViewTestCase(BaseTestCase):
 
         url = reverse_lazy('clients:create')
         payload = {
-            'business_owner': self.business_owner.pk,
             'first_name': "First",
             'last_name': "Last",
             'birthdate': "05/05/2001",
@@ -81,7 +80,6 @@ class ClientViewTestCase(BaseTestCase):
 
         url = reverse('clients:update', args=[self.my_client.id])
         payload = {
-            'business_owner': self.business_owner.pk,
             'first_name': "Fayyoz",
             'last_name': "Last",
             'birthdate': "05/05/2001",

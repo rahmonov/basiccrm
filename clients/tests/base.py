@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 
 from clients.models import Client
@@ -15,12 +16,12 @@ class BaseTestCase(TestCase):
 
         self.business_owner = BusinessOwner.objects.create(user=self.user)
         self.my_client = Client.objects.create(
-            business_owner=self.business_owner,
             first_name='First',
             last_name='Last',
             birthdate=timezone.now(),
             email="someuser@gmail.com",
             address="Tashkent",
             phone_number="+998915228512",
-            gender="M"
+            gender="M",
+            profile_image=reverse(),
         )
