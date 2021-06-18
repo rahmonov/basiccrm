@@ -49,14 +49,19 @@ class ClientCreateView(LoginRequiredMixin, View):
         return render(request, 'clients/create.html', context)
 
     def post(self, request):
-        form = ClientForm(data=request.POST)
+        form = ClientForm(data=request.POST, files=request.FILES)
 
         context = {
             'form': form
         }
 
         if form.is_valid():
-            form.save()
+            business_owner = request.user.businessowner
+
+            client = form.save(commit=False)
+            client.business_owner = business_owner
+            client.save()
+
             return redirect(reverse('clients:list'))
         else:
             return render(request, 'clients/create.html', context)
@@ -92,7 +97,8 @@ class ClientUpdateView(LoginRequiredMixin, View):
 
         form = ClientForm(
             instance=client,
-            data=request.POST
+            data=request.POST,
+            files=request.FILES
         )
 
         context = {

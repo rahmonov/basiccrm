@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 
 from users.forms import CustomUserCreationForm, CustomLoginForm
-from users.models import User
+from users.models import User, BusinessOwner
 
 
 class RegisterView(View):
@@ -22,8 +22,9 @@ class RegisterView(View):
         form = CustomUserCreationForm(data=request.POST)
 
         if form.is_valid():
-            form.save()
-            return redirect('landing')
+            user = form.save()
+            BusinessOwner.objects.create(user=user)
+            return redirect('users:login')
         else:
             return render(request, template_name='users/register.html', context={'form': form})
 
