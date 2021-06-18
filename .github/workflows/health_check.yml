@@ -1,0 +1,36 @@
+name: Health Check
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+
+jobs:
+  health-check-job:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: basiccrm
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup python env
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Check Python version
+        run: python --version
+      - name: Install requirements
+        run: pip install -r requirements.txt
+      - name: Run migrations
+        run: python manage.py migrate
+      - name: Run Test
+        run: python manage.py test
