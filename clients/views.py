@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 
 from django.views import View
 from django.views.generic import ListView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, UpdateView
 
 from clients.forms import ClientForm
 from clients.models import Client
@@ -69,39 +69,8 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
     pk_url_kwarg = 'id'
 
 
-class ClientUpdateView(LoginRequiredMixin, View):
-    def get(self, request, id):
-        try:
-            client = Client.objects.get(pk=id)
-        except Client.DoesNotExist:
-            raise Http404()
-
-        form = ClientForm(instance=client)
-
-        context = {
-            'form': form
-        }
-
-        return render(request, 'clients/update.html', context)
-
-    def post(self, request, id):
-        try:
-            client = Client.objects.get(pk=id)
-        except Client.DoesNotExist:
-            raise Http404()
-
-        form = ClientForm(
-            instance=client,
-            data=request.POST
-        )
-
-        context = {
-            'form': form
-        }
-
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('clients:list'))
-
-        return render(request, 'clients/create.html', context)
-
+class ClientUpdateView(UpdateView):
+    model = Client
+    template_name = 'clients/update.html'
+    form_class = ClientForm
+    success_url = reverse_lazy('clients:list')
