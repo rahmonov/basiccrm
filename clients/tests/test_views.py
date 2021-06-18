@@ -8,9 +8,6 @@ from ..models import Client
 
 
 class ClientViewTestCase(BaseTestCase):
-    def test_fail(self):
-        assert 1 == 3
-
     def test_list_for_business_owner(self):
         self.client.login(username='someuser', password='testpass')
         user2 = User.objects.create(username='someuser2')
