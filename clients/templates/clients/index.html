@@ -8,13 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <title>Dashboard - SB Admin</title>
 
-
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet"/>
-
 
 </head>
 <body>
@@ -67,10 +63,10 @@
 
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="">Unassigned</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'clients:unassigned' %}">Unassigned</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Assigned</a>
+                <a class="nav-link" href="{% url 'clients:assigned' %}">Assigned</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Converted</a>
@@ -93,7 +89,6 @@
 
             <tbody>
             {% for client in clients %}
-                {% if not client.agent %}
                     <tr class="table-light">
                         <td>{{ client.first_name }} {{ client.last_name }}</td>
                         <td>{{ client.birthdate }}</td>
@@ -120,10 +115,6 @@
                             </div>
                         </td>
                     </tr>
-                {% else %}
-
-                {% endif %}
-
             {% endfor %}
             </tbody>
         </table>

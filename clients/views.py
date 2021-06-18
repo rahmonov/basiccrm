@@ -111,3 +111,18 @@ class ClientUpdateView(LoginRequiredMixin, View):
 
         return render(request, 'clients/create.html', context)
 
+
+class ClientUnAssignedListView(LoginRequiredMixin, ListView):
+    template_name = 'clients/index.html'
+    context_object_name = 'clients'
+
+    def get_queryset(self):
+        return Client.objects.filter(business_owner=self.request.user.businessowner, agent__isnull=True)
+
+
+class ClientAssignedListView(LoginRequiredMixin, ListView):
+    template_name = 'clients/index.html'
+    context_object_name = 'clients'
+
+    def get_queryset(self):
+        return Client.objects.filter(business_owner=self.request.user.businessowner, agent__isnull=False)
