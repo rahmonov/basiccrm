@@ -2,9 +2,10 @@
 
 {% block content %}
 
-    <a href="{% url 'clients:list' %}">Clients list</a>
-    <br>
     <h3>Client: {{ client.first_name }}</h3>
+
+    <img src="{{ client.profile_picture.url }}" width="300" height="200">
+
     <table class="blueTable">
         <thead>
         <tr>

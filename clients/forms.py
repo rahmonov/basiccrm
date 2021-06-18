@@ -8,14 +8,14 @@ class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = (
-            'business_owner',
             'first_name',
             'last_name',
             'email',
             'birthdate',
             'phone_number',
             'address',
-            'gender'
+            'gender',
+            'profile_picture'
         )
         widgets = {
             'birthdate': forms.DateInput(attrs={'type': 'date'})
