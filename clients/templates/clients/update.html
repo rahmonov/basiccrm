@@ -1,22 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Update a client</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<a href="{% url 'clients:list' %}">Clients Page</a>
+{% block content %}
+    <a href="{% url 'clients:list' %}">Clients Page</a>
 
-<h3>Update a client:</h3>
+    <h3>Update a client:</h3>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
 
-    <button>Submit</button>
-</form>
-
-
-</body>
-</html>
+        <button>Submit</button>
+    </form>
+{% endblock %}

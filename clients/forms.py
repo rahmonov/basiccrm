@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 
 from clients.models import Client
 
@@ -16,13 +17,26 @@ class ClientForm(forms.ModelForm):
             'address',
             'gender'
         )
+        widgets = {
+            'birthdate': forms.DateInput(attrs={'type': 'date'})
+        }
 
+    def clean_birthdate(self):
+        cleaned_data = self.clean()
+        birthdate = cleaned_data['birthdate']
 
-# class ClientForm(forms.Form):
-#     first_name = forms.CharField()
-#     last_name = forms.CharField()
-#     email = forms.EmailField()
-#     birthdate = forms.DateTimeField()
-#     phone_number = forms.CharField()
-#     address = forms.CharField()
-#     gender = forms.ChoiceField(choices=Client.CHOICES)
+        if birthdate >= timezone.now():
+            raise forms.ValidationError("Birthdate cannot be in future")
+
+        return birthdate
+
+    def clean_email(self):
+        cleaned_data = self.clean()
+        email = cleaned_data['email']
+
+        _, domain = email.split('@')
+
+        if domain != 'gmail.com':
+            raise forms.ValidationError('Invalid domain. Only gmail.com is allowed!')
+
+        return email

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <a href="{% url 'clients:list' %}">Clients list</a>
+    <br>
+    <h3>Client: {{ client.first_name }}</h3>
+    <table class="blueTable">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Field name</th>
+            <th>Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>First name</td>
+            <td>{{ client.first_name }}</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Last name</td>
+            <td>{{ client.last_name }}</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Birthdate</td>
+            <td>{{ client.birthdate }}</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Email</td>
+            <td>{{ client.email }}</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Phone number</td>
+            <td>{{ client.phone_number }}</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>Address</td>
+            <td>{{ client.address }}</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>Gender</td>
+            <td>{{ client.gender }}</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>Photo</td>
+            <td>{{ client.profile_picture }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+{% endblock %}
