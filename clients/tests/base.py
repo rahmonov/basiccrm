@@ -10,6 +10,9 @@ class BaseTestCase(TestCase):
         super().setUp()
 
         self.user = User.objects.create(username='someuser')
+        self.user.set_password('testpass')
+        self.user.save()
+
         self.business_owner = BusinessOwner.objects.create(user=self.user)
         self.my_client = Client.objects.create(
             business_owner=self.business_owner,

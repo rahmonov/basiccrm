@@ -14,6 +14,10 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('clients:index')
     template_name = 'clients/create.html'
 
+    def form_valid(self, form):
+        form.instance.business_owner = self.request.user.businessowner
+        return super().form_valid(form)
+
 
 class IndexView(LoginRequiredMixin, ListView):
     template_name = 'clients/index.html'
@@ -48,4 +52,3 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'client'
     pk_url_kwarg = 'id'
     template_name = 'clients/detail.html'
-
