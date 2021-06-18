@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, reverse
 from django.views import View
 from .forms import CustomUserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User
+from .models import User, BusinessOwner
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 
@@ -22,8 +22,11 @@ class UserSignUpView(View):
         form = CustomUserCreationForm(data=request.POST)
 
         if form.is_valid():
-            form.save()
-            return redirect(reverse('pages:home'))
+            user = form.save()
+            # creating new business owner when there is new user singing up
+            BusinessOwner.objects.create(user=user)
+            return redirect(reverse('users:login'))
+
         else:
             context = {
                 'form': form
