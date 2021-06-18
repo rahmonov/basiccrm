@@ -22,7 +22,7 @@ class Client(models.Model):
     phone_number = PhoneNumberField()
     address = models.CharField(max_length=255)
     gender = models.CharField(choices=CHOICES, max_length=1)
-    profile_picture = models.ImageField(null=True, blank=True)
+    profile_picture = models.ImageField(null=True, blank=True, upload_to='images')
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
