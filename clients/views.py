@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
@@ -16,15 +17,22 @@ class ClientListView(LoginRequiredMixin, ListView):
     context_object_name = 'clients'
 
     def get_queryset(self):
+        search_param = self.request.GET.get('q')
+        queryset = Client.objects.all()
+
         if self.request.user.is_agent():
-            print("Sending agent clients")
-            return Client.objects.filter(agent=self.request.user.agent)
+            queryset = Client.objects.filter(agent=self.request.user.agent)
         elif self.request.user.is_business_owner():
-            print("Sending business owner clients")
-            return Client.objects.filter(business_owner=self.request.user.businessowner)
-        else:
-            print("Sending all clients")
-            return Client.objects.all()
+            queryset = Client.objects.filter(business_owner=self.request.user.businessowner)
+
+        if search_param:
+            queryset = queryset.filter(
+                Q(first_name__icontains=search_param) |
+                Q(last_name__icontains=search_param) |
+                Q(email__icontains=search_param)
+            )
+
+        return queryset
 
 
 class ClientDetailedView(LoginRequiredMixin, View):
