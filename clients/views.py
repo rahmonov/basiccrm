@@ -1,29 +1,25 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 
 from django.views import View
-from django.views.generic import ListView
 from django.views.generic.edit import DeleteView, UpdateView
 
 from clients.forms import ClientForm
 from clients.models import Client
 
 
-class ClientListView(LoginRequiredMixin, ListView):
-    template_name = 'clients/list.html'
-    context_object_name = 'clients'
-
-    def get_queryset(self):
-        search_param = self.request.GET.get('q')
+class ClientListView(View):
+    def get(self, request):
+        search_param = request.GET.get('q')
         queryset = Client.objects.all()
 
-        if self.request.user.is_agent():
-            queryset = Client.objects.filter(agent=self.request.user.agent)
-        elif self.request.user.is_business_owner():
-            queryset = Client.objects.filter(business_owner=self.request.user.businessowner)
+        if request.user.is_agent():
+            queryset = Client.objects.filter(agent=request.user.agent)
+        elif request.user.is_business_owner():
+            queryset = Client.objects.filter(business_owner=request.user.businessowner)
 
         if search_param:
             queryset = queryset.filter(
@@ -32,7 +28,16 @@ class ClientListView(LoginRequiredMixin, ListView):
                 Q(email__icontains=search_param)
             )
 
-        return queryset
+        paginator = Paginator(queryset, 2)
+        page_num = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_num)
+
+        context = {
+            'clients': page_obj.object_list,
+            'page_obj': page_obj
+        }
+
+        return render(request, 'clients/list.html', context)
 
 
 class ClientDetailedView(LoginRequiredMixin, View):
