@@ -11,4 +11,7 @@ urlpatterns = [
     path('crm/clients/', include('clients.urls'), name='clients'),
     path('crm/agents/', include('agents.urls'), name='agents'),
     path('users/', include('users.urls'), name='users'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

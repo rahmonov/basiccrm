@@ -1,31 +1,44 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 
 from django.views import View
-from django.views.generic import ListView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, UpdateView
 
 from clients.forms import ClientForm
 from clients.models import Client
 
 
-class ClientListView(LoginRequiredMixin, ListView):
-    queryset = Client.objects.all()
-    template_name = 'clients/list.html'
-    context_object_name = 'clients'
 
-    def get_queryset(self):
-        if self.request.user.is_agent():
-            print("Sending agent clients")
-            return Client.objects.filter(agent=self.request.user.agent)
-        elif self.request.user.is_business_owner():
-            print("Sending business owner clients")
-            return Client.objects.filter(business_owner=self.request.user.businessowner)
-        else:
-            print("Sending all clients")
-            return Client.objects.all()
+class ClientListView(View):
+    def get(self, request):
+        search_param = request.GET.get('q')
+        queryset = Client.objects.all()
+
+        if request.user.is_agent():
+            queryset = Client.objects.filter(agent=request.user.agent)
+        elif request.user.is_business_owner():
+            queryset = Client.objects.filter(business_owner=request.user.businessowner)
+
+        if search_param:
+            queryset = queryset.filter(
+                Q(first_name__icontains=search_param) |
+                Q(last_name__icontains=search_param) |
+                Q(email__icontains=search_param)
+            )
+
+        paginator = Paginator(queryset, 2)
+        page_num = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_num)
+
+        context = {
+            'clients': page_obj.object_list,
+            'page_obj': page_obj
+        }
+
+        return render(request, 'clients/list.html', context)
 
 
 class ClientDetailedView(LoginRequiredMixin, View):
@@ -75,40 +88,9 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
     pk_url_kwarg = 'id'
 
 
-class ClientUpdateView(LoginRequiredMixin, View):
-    def get(self, request, id):
-        try:
-            client = Client.objects.get(pk=id)
-        except Client.DoesNotExist:
-            raise Http404()
-
-        form = ClientForm(instance=client)
-
-        context = {
-            'form': form
-        }
-
-        return render(request, 'clients/update.html', context)
-
-    def post(self, request, id):
-        try:
-            client = Client.objects.get(pk=id)
-        except Client.DoesNotExist:
-            raise Http404()
-
-        form = ClientForm(
-            instance=client,
-            data=request.POST,
-            files=request.FILES
-        )
-
-        context = {
-            'form': form
-        }
-
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('clients:list'))
-
-        return render(request, 'clients/create.html', context)
-
+class ClientUpdateView(UpdateView):
+    model = Client
+    template_name = 'clients/update.html'
+    form_class = ClientForm
+    success_url = reverse_lazy('clients:list')
+    pk_url_kwarg = 'id'
