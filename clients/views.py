@@ -12,6 +12,7 @@ from clients.models import Client
 
 
 class ClientListView(LoginRequiredMixin, ListView):
+    queryset = Client.objects.all()
     template_name = 'clients/list.html'
     context_object_name = 'clients'
 

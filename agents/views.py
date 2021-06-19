@@ -1,7 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.views import View
 from django.views.generic import ListView
 
-from users.models import Agent
+from agents.forms import AgentForm
+from agents.models import Agent
+from users.models import User
 
 
 class AgentListView(LoginRequiredMixin, ListView):
@@ -24,3 +29,33 @@ class AgentListView(LoginRequiredMixin, ListView):
     #     else:
     #         print("Sending all clients")
     #         return Client.objects.all()
+
+
+class AgentCreateView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        business_owner = request.user.businessowner
+        form = AgentForm(initial={'business_owner':business_owner})
+        form.fields['user'].queryset = User.objects.filter(agent__isnull=True)
+        context = {
+            'form': form
+        }
+
+        return render(request, 'agents/create.html', context)
+
+    def post(self, request):
+        form = AgentForm(data=request.POST, files=request.FILES)
+
+        context = {
+            'form': form
+        }
+
+        if form.is_valid():
+            business_owner = request.user.businessowner
+            agent = form.save(commit=False)
+            agent.business_owner = business_owner
+            agent.save()
+
+            return redirect(reverse('agents:list'))
+        else:
+            return render(request, 'agents/create.html', context)

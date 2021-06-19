@@ -4,7 +4,7 @@
 {% block content %}
     <h3>Agents:</h3>
 
-    <a href="#">Create an agent</a>
+    <a href="{%  url 'agents:create' %}">Create an agent</a>
 
     {% for agent in agents %}
 
