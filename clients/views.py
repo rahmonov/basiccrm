@@ -79,3 +79,4 @@ class ClientUpdateView(UpdateView):
     template_name = 'clients/update.html'
     form_class = ClientForm
     success_url = reverse_lazy('clients:list')
+    pk_url_kwarg = 'id'
