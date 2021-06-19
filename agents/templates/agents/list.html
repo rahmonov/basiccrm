@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h3>Agents:</h3>
+
+    <a href="{%  url 'agents:create' %}">Create an agent</a>
+
+    {% for agent in agents %}
+
+        <p class="client-row">
+            {{ agent.user }} {{ agent.business_owner }}:
+            <a href="#">Delete</a> / <a href="#">Update</a> / <a href="#">View</a>
+        </p>
+
+    {% endfor %}
+{% endblock %}

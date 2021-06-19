@@ -11,6 +11,7 @@ from clients.forms import ClientForm
 from clients.models import Client
 
 
+
 class ClientListView(View):
     def get(self, request):
         search_param = request.GET.get('q')
