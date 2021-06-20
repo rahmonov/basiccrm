@@ -29,7 +29,7 @@ class ClientListView(View):
                 Q(email__icontains=search_param)
             )
 
-        paginator = Paginator(queryset, 2)
+        paginator = Paginator(queryset, 5)
         page_num = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_num)
 
