@@ -14,6 +14,8 @@ from clients.models import Client
 class ClientListView(View):
     def get(self, request):
         search_param = request.GET.get('q')
+        type_client = request.GET.get('type')
+
         queryset = Client.objects.all()
 
         if request.user.is_agent():
@@ -27,6 +29,12 @@ class ClientListView(View):
                 Q(last_name__icontains=search_param) |
                 Q(email__icontains=search_param)
             )
+
+        if type_client == 'unassigned':
+            # Default unassigned clients list
+            queryset = queryset.filter(agent__isnull=True)
+        elif type_client == 'assigned':
+            queryset = queryset.filter(agent__isnull=False)
 
         paginator = Paginator(queryset, 2)
         page_num = request.GET.get('page', 1)
