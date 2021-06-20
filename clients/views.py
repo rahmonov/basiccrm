@@ -11,7 +11,6 @@ from clients.forms import ClientForm
 from clients.models import Client
 
 
-
 class ClientListView(View):
     def get(self, request):
         search_param = request.GET.get('q')
@@ -38,7 +37,7 @@ class ClientListView(View):
             'page_obj': page_obj
         }
 
-        return render(request, 'clients/list.html', context)
+        return render(request, 'clients/index.html', context)
 
 
 class ClientDetailedView(LoginRequiredMixin, View):
