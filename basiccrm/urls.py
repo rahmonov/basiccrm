@@ -9,6 +9,7 @@ urlpatterns = [
     path('', LandingView.as_view(), name='landing'),
     path('admin/', admin.site.urls),
     path('crm/clients/', include('clients.urls'), name='clients'),
+    path('crm/agents/', include('agents.urls'), name='agents'),
     path('users/', include('users.urls'), name='users'),
 ]
 

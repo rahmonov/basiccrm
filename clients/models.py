@@ -1,6 +1,7 @@
 from django.db import models
 
-from users.models import Agent, BusinessOwner
+from users.models import BusinessOwner
+from agents.models import Agent
 
 
 class Client(models.Model):
