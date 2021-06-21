@@ -1,4 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -9,26 +11,25 @@ from agents.models import Agent
 from users.models import User
 
 
-class AgentListView(LoginRequiredMixin, ListView):
-    model = Agent
-    template_name = 'agents/list.html'
-    context_object_name = 'agents'
+class AgentListView(LoginRequiredMixin, View):
+    def get(self, request):
+        # search_param = request.GET.get('q')
+        # agent_type = request.GET.get('type')
+        queryset = Agent.objects.all()
 
-    def get_queryset(self):
-        if self.request.user.is_business_owner():
-            return Agent.objects.filter(business_owner=self.request.user.businessowner)
+        if request.user.is_business_owner():
+            queryset = Agent.objects.filter(business_owner=request.user.businessowner)
 
+        paginator = Paginator(queryset, 5)
+        page_num = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_num)
 
-    # def get_queryset(self):
-    #     if self.request.user.is_agent():
-    #         print("Sending agent clients")
-    #         return Client.objects.filter(agent=self.request.user.agent)
-    #     elif self.request.user.is_business_owner():
-    #         print("Sending business owner clients")
-    #         return Client.objects.filter(business_owner=self.request.user.businessowner)
-    #     else:
-    #         print("Sending all clients")
-    #         return Client.objects.all()
+        context = {
+            'agents': page_obj.object_list,
+            'page_obj': page_obj,
+        }
+
+        return render(request, 'agents/index.html', context)
 
 
 class AgentCreateView(LoginRequiredMixin, View):
@@ -59,3 +60,4 @@ class AgentCreateView(LoginRequiredMixin, View):
             return redirect(reverse('agents:list'))
         else:
             return render(request, 'agents/create.html', context)
+
