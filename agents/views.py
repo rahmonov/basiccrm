@@ -20,7 +20,7 @@ class AgentListView(LoginRequiredMixin, View):
         if request.user.is_business_owner():
             queryset = Agent.objects.filter(business_owner=request.user.businessowner)
 
-        paginator = Paginator(queryset, 5)
+        paginator = Paginator(queryset.order_by('id'), 5)
         page_num = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_num)
 
