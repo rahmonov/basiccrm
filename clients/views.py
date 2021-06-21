@@ -32,11 +32,13 @@ class ClientListView(View):
 
         if type_client == 'unassigned':
             # Default unassigned clients list
-            queryset = queryset.filter(agent__isnull=True)
+            queryset = queryset.filter(agent__isnull=True, is_converted=False)
         elif type_client == 'assigned':
-            queryset = queryset.filter(agent__isnull=False)
+            queryset = queryset.filter(agent__isnull=False, is_converted=False)
+        elif type_client == 'converted':
+            queryset = queryset.filter(is_converted=True, agent__isnull=False)
 
-        paginator = Paginator(queryset, 2)
+        paginator = Paginator(queryset.order_by('id'), 5)
         page_num = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_num)
 

@@ -43,14 +43,20 @@
 
 
         <script type="text/javascript">
+
             const currentLocation = location.href;
             const menuItem = document.querySelectorAll('a');
             const menuLength = menuItem.length
             for (let i = 0; i < menuLength; i++) {
                 if (menuItem[i].href === currentLocation) {
-                    menuItem[i].className += ' active'
+                    if (menuItem[i].classList.contains(".active")) {
+                        menuItem[i].classList.remove('active');
+                    } else {
+                        menuItem[i].classList.add('active')
+                    }
                 }
             }
+
         </script>
 
         <table class="table table-hover">
