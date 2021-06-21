@@ -3,8 +3,11 @@
 {% block content %}
 
     <h3>Client: {{ client.first_name }}</h3>
-
-    <img src="{{ client.profile_picture.url }}" width="300" height="200">
+    {% if client.profile_picture %}
+        <img src="{{ client.profile_picture.url }}" width="300" height="200">
+    {% else %}
+        <h5>No Profile Picture</h5>
+    {% endif %}
 
     <table class="blueTable">
         <thead>

@@ -31,6 +31,7 @@ class ClientViewTestCase(BaseTestCase):
         self.assertNotContains(response, 'Second LastName')
         self.assertNotContains(response, '+49123123212123')
 
+
     def test_list_for_agent(self):
         self.client.login(username='someuser', password='testpass')
         user = User.objects.create(username='tempuser')
@@ -56,6 +57,33 @@ class ClientViewTestCase(BaseTestCase):
         self.assertContains(response, '+4912312321')
         self.assertNotContains(response, 'TempName TempLastName')
         self.assertNotContains(response, '+4913223212123')
+
+
+    def test_list_page_is_rendering(self):
+        self.client.login(username='someuser', password='testpass')
+        url = reverse('clients:list')
+        res = self.client.get(url)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, "Dashboard")
+        self.assertContains(res, "First")
+
+    def test_search_is_working(self):
+        self.client.login(username='someuser', password='testpass')
+        Client.objects.create(
+            business_owner=self.business_owner,
+            first_name='Second',
+            last_name='LastName',
+            birthdate=timezone.now(),
+            email='jrahm2@gmail.com',
+            address='SomeAddr2',
+            phone_number='+49123123212123',
+            gender='M'
+        )
+        url = reverse('clients:list') + '?q=Second'
+        res = self.client.get(url)
+        self.assertContains(res, "Second")
+        self.assertNotContains(res, "First")
 
 
     def test_create(self):

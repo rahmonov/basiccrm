@@ -4,7 +4,20 @@
 {% block content %}
     <h3>Clients:</h3>
 
-    <a href="{% url 'clients:create' %}">Create a client</a>
+    <div class="row mb-3">
+        <div class="col">
+            <a href="{% url 'clients:create' %}">Create a client</a>
+        </div>
+        <div class="col">
+            <form method="get">
+                <input type="text" name="q">
+
+                <button>Search</button>
+            </form>
+        </div>
+    </div>
+
+
 
     {% for client in clients %}
 
@@ -14,4 +27,23 @@
         </p>
 
     {% endfor %}
+
+    <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+            {% endif %}
+
+            <li class="page-item active">
+                <a href="#" class="page-link">{{ page_obj.number }}</a>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
 {% endblock %}
