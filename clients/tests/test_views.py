@@ -2,7 +2,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils import timezone
 
-from users.models import User, BusinessOwner, Agent
+from agents.models import Agent
+from users.models import User, BusinessOwner
 from .base import BaseTestCase
 from ..models import Client
 
@@ -31,7 +32,6 @@ class ClientViewTestCase(BaseTestCase):
         self.assertNotContains(response, 'Second LastName')
         self.assertNotContains(response, '+49123123212123')
 
-
     def test_list_for_agent(self):
         self.client.login(username='someuser', password='testpass')
         user = User.objects.create(username='tempuser')
@@ -57,7 +57,6 @@ class ClientViewTestCase(BaseTestCase):
         self.assertContains(response, '+4912312321')
         self.assertNotContains(response, 'TempName TempLastName')
         self.assertNotContains(response, '+4913223212123')
-
 
     def test_list_page_is_rendering(self):
         self.client.login(username='someuser', password='testpass')
