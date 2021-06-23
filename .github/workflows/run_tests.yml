@@ -29,3 +29,11 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run Test
         run: python manage.py test
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: False
+          DB_NAME: basiccrm
+          DB_USER: postgres
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: localhost
+          DB_PORT: 5432
