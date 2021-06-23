@@ -4,7 +4,6 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
-from django.views.generic import ListView
 
 from agents.forms import AgentForm
 from agents.models import Agent
@@ -13,12 +12,15 @@ from users.models import User
 
 class AgentListView(LoginRequiredMixin, View):
     def get(self, request):
-        # search_param = request.GET.get('q')
+        search_param = request.GET.get('q')
         agent_type = request.GET.get('type')
         queryset = Agent.objects.all()
 
         if request.user.is_business_owner():
             queryset = Agent.objects.filter(business_owner=request.user.businessowner)
+
+        if search_param:
+            queryset = queryset.filter(Q(user__username__icontains=search_param))
 
         if agent_type == "unassigned":
             queryset = queryset.filter(client__isnull=True)
