@@ -19,24 +19,11 @@ class AgentListView(LoginRequiredMixin, ListView):
             return Agent.objects.filter(business_owner=self.request.user.businessowner)
 
 
-    # def get_queryset(self):
-    #     if self.request.user.is_agent():
-    #         print("Sending agent clients")
-    #         return Client.objects.filter(agent=self.request.user.agent)
-    #     elif self.request.user.is_business_owner():
-    #         print("Sending business owner clients")
-    #         return Client.objects.filter(business_owner=self.request.user.businessowner)
-    #     else:
-    #         print("Sending all clients")
-    #         return Client.objects.all()
-
-
 class AgentCreateView(LoginRequiredMixin, View):
 
     def get(self, request):
         business_owner = request.user.businessowner
         form = AgentForm(initial={'business_owner':business_owner})
-        form.fields['user'].queryset = User.objects.filter(agent__isnull=True)
         context = {
             'form': form
         }
@@ -44,17 +31,32 @@ class AgentCreateView(LoginRequiredMixin, View):
         return render(request, 'agents/create.html', context)
 
     def post(self, request):
-        form = AgentForm(data=request.POST, files=request.FILES)
+        form = AgentForm(data=request.POST)
 
         context = {
             'form': form
         }
 
         if form.is_valid():
-            business_owner = request.user.businessowner
-            agent = form.save(commit=False)
-            agent.business_owner = business_owner
-            agent.save()
+            username = form.cleaned_data['username']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email=form.cleaned_data['email']
+            region = form.cleaned_data['region']
+            business_owner = form.cleaned_data['business_owner']
+
+            user = User.objects.create(
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                email=email
+                )
+
+            agent = Agent.objects.create(
+                user=user,
+                business_owner=business_owner,
+                region=region
+            )
 
             return redirect(reverse('agents:list'))
         else:
