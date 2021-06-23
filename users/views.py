@@ -2,7 +2,6 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm
 
 from users.forms import CustomUserCreationForm, CustomLoginForm
 from users.models import User, BusinessOwner
