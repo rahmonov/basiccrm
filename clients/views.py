@@ -47,7 +47,8 @@ class ClientListView(LoginRequiredMixin, View):
 
         context = {
             'clients': page_obj.object_list,
-            'page_obj': page_obj
+            'page_obj': page_obj,
+            'type_client': type_client
         }
 
         return render(request, 'clients/index.html', context)
