@@ -1,0 +1,31 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+
+jobs:
+  run-test-job:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: basiccrm
+        ports:
+          - 5432:5432
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up python env
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install requirements
+        run: pip install -r requirements.txt
+      - name: Run Test
+        run: python manage.py test

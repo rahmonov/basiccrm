@@ -29,7 +29,7 @@ class ClientListView(View):
                 Q(last_name__icontains=search_param) |
                 Q(email__icontains=search_param)
             )
-
+            
         if type_client == 'unassigned':
             # Default unassigned clients list
             queryset = queryset.filter(agent__isnull=True, is_converted=False)
@@ -39,6 +39,7 @@ class ClientListView(View):
             queryset = queryset.filter(is_converted=True, agent__isnull=False)
 
         paginator = Paginator(queryset.order_by('id'), 5)
+
         page_num = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_num)
 
