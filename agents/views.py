@@ -31,6 +31,7 @@ class AgentCreateView(LoginRequiredMixin, View):
         return render(request, 'agents/create.html', context)
 
     def post(self, request):
+        business_owner = request.user.businessowner
         form = AgentForm(data=request.POST)
 
         context = {
@@ -41,18 +42,17 @@ class AgentCreateView(LoginRequiredMixin, View):
             username = form.cleaned_data['username']
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
-            email=form.cleaned_data['email']
+            email = form.cleaned_data['email']
             region = form.cleaned_data['region']
-            business_owner = form.cleaned_data['business_owner']
 
             user = User.objects.create(
                 username=username,
                 first_name=first_name,
                 last_name=last_name,
                 email=email
-                )
+            )
 
-            agent = Agent.objects.create(
+            Agent.objects.create(
                 user=user,
                 business_owner=business_owner,
                 region=region

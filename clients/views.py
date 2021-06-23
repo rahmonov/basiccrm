@@ -30,6 +30,9 @@ class ClientListView(View):
                 Q(email__icontains=search_param)
             )
 
+        if type_client is None:
+            type_client = 'unassigned'
+
         if type_client == 'unassigned':
             # Default unassigned clients list
             queryset = queryset.filter(agent__isnull=True, is_converted=False)
