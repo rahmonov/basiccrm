@@ -51,7 +51,7 @@ class ClientListView(LoginRequiredMixin, View):
             'type_client': type_client
         }
 
-        return render(request, 'clients/index.html', context)
+        return render(request, 'clients/list.html', context)
 
 
 class ClientDetailedView(LoginRequiredMixin, View):
