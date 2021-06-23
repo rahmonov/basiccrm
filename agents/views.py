@@ -14,11 +14,16 @@ from users.models import User
 class AgentListView(LoginRequiredMixin, View):
     def get(self, request):
         # search_param = request.GET.get('q')
-        # agent_type = request.GET.get('type')
+        agent_type = request.GET.get('type')
         queryset = Agent.objects.all()
 
         if request.user.is_business_owner():
             queryset = Agent.objects.filter(business_owner=request.user.businessowner)
+
+        if agent_type == "unassigned":
+            queryset = queryset.filter(client__isnull=True)
+        elif agent_type == "assigned":
+            queryset = queryset.filter(client__isnull=False).distinct()
 
         paginator = Paginator(queryset.order_by('id'), 5)
         page_num = request.GET.get('page', 1)
