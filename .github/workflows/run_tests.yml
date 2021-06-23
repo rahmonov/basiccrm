@@ -34,6 +34,6 @@ jobs:
           DEBUG: False
           DB_NAME: basiccrm
           DB_USER: postgres
-          DB_PASSWORD: postgres
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_HOST: localhost
           DB_PORT: 5432
