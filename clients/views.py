@@ -11,7 +11,7 @@ from clients.forms import ClientForm
 from clients.models import Client
 
 
-class ClientListView(View):
+class ClientListView(LoginRequiredMixin, View):
     def get(self, request):
         search_param = request.GET.get('q')
         type_client = request.GET.get('type')
