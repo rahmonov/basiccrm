@@ -9,10 +9,11 @@ jobs:
   deploy-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
       - name: Deploy
-        uses: webfactory/ssh-agent@v0.5.3
+        uses: appleboy/ssh-action@master
         with:
-          ssh-private-key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-          run: ./deployment/deploy_prod.sh
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USER }}
+          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          script: |
+            /root/app/basiccrm/deployment/deploy_prod.sh
