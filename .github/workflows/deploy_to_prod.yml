@@ -14,5 +14,5 @@ jobs:
       - name: Deploy
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
           run: ./deployment/deploy_prod.sh
