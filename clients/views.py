@@ -12,16 +12,21 @@ from clients.models import Client
 
 
 class ClientListView(LoginRequiredMixin, View):
+    def get_user_clients(self, user):
+        queryset = Client.objects.all()
+
+        if user.is_agent():
+            queryset = Client.objects.filter(agent=user.agent)
+        elif user.is_business_owner():
+            queryset = Client.objects.filter(business_owner=user.businessowner)
+
+        return queryset
+
     def get(self, request):
         search_param = request.GET.get('q')
         type_client = request.GET.get('type')
 
-        queryset = Client.objects.all()
-
-        if request.user.is_agent():
-            queryset = Client.objects.filter(agent=request.user.agent)
-        elif request.user.is_business_owner():
-            queryset = Client.objects.filter(business_owner=request.user.businessowner)
+        queryset = self.get_user_clients(user=request.user)
 
         if search_param:
             queryset = queryset.filter(
