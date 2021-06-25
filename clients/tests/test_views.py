@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils import timezone
@@ -33,10 +34,11 @@ class ClientViewTestCase(BaseTestCase):
         self.assertNotContains(response, '+49123123212123')
 
     def test_list_for_agent(self):
-        self.client.login(username='someuser', password='testpass')
-        user = User.objects.create(username='tempuser')
+        user = User.objects.create(username='agentuser', password=make_password('agentpass'))
         business_owner = BusinessOwner.objects.create(user=user)
         agent = Agent.objects.create(user=user, business_owner=business_owner)
+
+        self.client.login(username='agentuser', password='agentpass')
 
         Client.objects.create(
             business_owner=business_owner,
@@ -53,10 +55,10 @@ class ClientViewTestCase(BaseTestCase):
         response = self.client.get(reverse('clients:list'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'First Last')
-        self.assertContains(response, '+4912312321')
-        self.assertNotContains(response, 'TempName TempLastName')
-        self.assertNotContains(response, '+4913223212123')
+        self.assertContains(response, 'TempName TempLastName')
+        self.assertContains(response, '+4913223212123')
+        self.assertNotContains(response, 'First Last')
+        self.assertNotContains(response, '+4912312321')
 
     def test_list_page_is_rendering(self):
         self.client.login(username='someuser', password='testpass')

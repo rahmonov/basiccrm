@@ -12,39 +12,17 @@ from clients.models import Client
 
 
 class ClientListView(LoginRequiredMixin, View):
-    def get_user_clients(self, user):
-        queryset = Client.objects.all()
-
-        if user.is_agent():
-            queryset = Client.objects.filter(agent=user.agent)
-        elif user.is_business_owner():
-            queryset = Client.objects.filter(business_owner=user.businessowner)
-
-        return queryset
-
     def get(self, request):
         search_param = request.GET.get('q')
-        type_client = request.GET.get('type')
+        client_type = request.GET.get('type')
 
-        queryset = self.get_user_clients(user=request.user)
+        queryset = self._get_user_clients(user=request.user)
+        queryset = self._filter_by_search_param(search_param, queryset)
 
-        if search_param:
-            queryset = queryset.filter(
-                Q(first_name__icontains=search_param) |
-                Q(last_name__icontains=search_param) |
-                Q(email__icontains=search_param)
-            )
+        if client_type is None:
+            client_type = 'assigned' if request.user.is_agent() else 'unassigned'
 
-        if type_client is None:
-            type_client = 'unassigned'
-
-        if type_client == 'unassigned':
-            # Default unassigned clients list
-            queryset = queryset.filter(agent__isnull=True, is_converted=False)
-        elif type_client == 'assigned':
-            queryset = queryset.filter(agent__isnull=False, is_converted=False)
-        elif type_client == 'converted':
-            queryset = queryset.filter(is_converted=True, agent__isnull=False)
+        queryset = self._filter_by_client_type(client_type, queryset)
 
         paginator = Paginator(queryset.order_by('id'), 5)
         page_num = request.GET.get('page', 1)
@@ -53,10 +31,40 @@ class ClientListView(LoginRequiredMixin, View):
         context = {
             'clients': page_obj.object_list,
             'page_obj': page_obj,
-            'type_client': type_client
+            'client_type': client_type
         }
 
         return render(request, 'clients/list.html', context)
+
+    def _filter_by_client_type(self, client_type, queryset):
+        if client_type == 'unassigned':
+            # Default unassigned clients list
+            queryset = queryset.filter(agent__isnull=True, is_converted=False)
+        elif client_type == 'assigned':
+            queryset = queryset.filter(agent__isnull=False, is_converted=False)
+        elif client_type == 'converted':
+            queryset = queryset.filter(is_converted=True, agent__isnull=False)
+
+        return queryset
+
+    def _filter_by_search_param(self, search_param, queryset):
+        if search_param:
+            queryset = queryset.filter(
+                Q(first_name__icontains=search_param) |
+                Q(last_name__icontains=search_param) |
+                Q(email__icontains=search_param)
+            )
+        return queryset
+
+    def _get_user_clients(self, user):
+        queryset = Client.objects.all()
+
+        if user.is_agent():
+            queryset = Client.objects.filter(agent=user.agent)
+        elif user.is_business_owner():
+            queryset = Client.objects.filter(business_owner=user.businessowner)
+
+        return queryset
 
 
 class ClientDetailedView(LoginRequiredMixin, View):

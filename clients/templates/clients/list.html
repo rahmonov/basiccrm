@@ -27,9 +27,11 @@ dashboard
         </div>
     </div>
     <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link {% if type_client == 'unassigned' %} active {% endif %}" aria-current="page" href="?type=unassigned">Unassigned</a>
-        </li>
+        {% if not user.is_agent %}
+            <li class="nav-item">
+                <a class="nav-link {% if type_client == 'unassigned' %} active {% endif %}" aria-current="page" href="?type=unassigned">Unassigned</a>
+            </li>
+        {% endif %}
         <li class="nav-item">
             <a class="nav-link {% if type_client == 'assigned' %} active {% endif %}" href="?type=assigned">Assigned</a>
         </li>
