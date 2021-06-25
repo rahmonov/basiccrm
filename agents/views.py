@@ -23,11 +23,6 @@ class AgentListView(LoginRequiredMixin, View):
         if search_param:
             queryset = queryset.filter(Q(user__username__icontains=search_param))
 
-        if agent_type == "unassigned":
-            queryset = queryset.filter(client__isnull=True)
-        elif agent_type == "assigned":
-            queryset = queryset.filter(client__isnull=False).distinct()
-
         paginator = Paginator(queryset.order_by('id'), 5)
         page_num = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_num)

@@ -29,36 +29,14 @@
                 </div>
             </div>
         </div>
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="?type=unassigned">Unassigned</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="?type=assigned">Assigned</a>
-            </li>
-        </ul>
 
-
-        <script type="text/javascript">
-
-            const currentLocation = location.href;
-            const menuItem = document.querySelectorAll('a');
-            const menuLength = menuItem.length
-            for (let i = 0; i < menuLength; i++) {
-                if (menuItem[i].href === currentLocation) {
-                    if (menuItem[i].classList.contains(".active")) {
-                        menuItem[i].classList.remove('active');
-                    } else {
-                        menuItem[i].classList.add('active')
-                    }
-                }
-            }
-        </script>
 
         <table class="table table-hover">
             <thead>
             <tr>
                 <th>Name</th>
+                <th>Email</th>
+                <th>Region</th>
                 <th>Edit</th>
             </tr>
             </thead>
@@ -66,7 +44,9 @@
             <tbody>
             {% for agent in agents %}
                 <tr class="table-light">
-                    <td>{{ agent.user.username }}</td>
+                    <td>{{ agent.user.first_name }} {{ agent.user.last_name }}</td>
+                    <td>{{ agent.user.email }}</td>
+                    <td>{{ agent.region }}</td>
                     <td>
                         <div class="btn dropdown">
                             <a class="dropdown-toggle" id="navbarDropdown" href="#"
