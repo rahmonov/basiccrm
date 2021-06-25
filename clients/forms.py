@@ -8,6 +8,7 @@ class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = (
+            'agent',
             'first_name',
             'last_name',
             'email',

@@ -14,6 +14,8 @@ from clients.models import Client
 class ClientListView(LoginRequiredMixin, View):
     def get(self, request):
         search_param = request.GET.get('q')
+        type_client = request.GET.get('type')
+
         queryset = Client.objects.all()
 
         if request.user.is_agent():
@@ -28,16 +30,28 @@ class ClientListView(LoginRequiredMixin, View):
                 Q(email__icontains=search_param)
             )
 
-        paginator = Paginator(queryset, 5)
+        if type_client is None:
+            type_client = 'unassigned'
+
+        if type_client == 'unassigned':
+            # Default unassigned clients list
+            queryset = queryset.filter(agent__isnull=True, is_converted=False)
+        elif type_client == 'assigned':
+            queryset = queryset.filter(agent__isnull=False, is_converted=False)
+        elif type_client == 'converted':
+            queryset = queryset.filter(is_converted=True, agent__isnull=False)
+
+        paginator = Paginator(queryset.order_by('id'), 5)
         page_num = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_num)
 
         context = {
             'clients': page_obj.object_list,
-            'page_obj': page_obj
+            'page_obj': page_obj,
+            'type_client': type_client
         }
 
-        return render(request, 'clients/index.html', context)
+        return render(request, 'clients/list.html', context)
 
 
 class ClientDetailedView(LoginRequiredMixin, View):

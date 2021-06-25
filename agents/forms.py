@@ -1,16 +1,9 @@
 from django import forms
 
-from agents.models import Agent
 
-#custome form needs to be used
-#froms.Form
-# every field need to be created
-
-class AgentForm(forms.ModelForm):
-    class Meta:
-        model = Agent
-        fields = (
-            'user',
-            'business_owner',
-        )
-
+class AgentForm(forms.Form):
+    username = forms.CharField(max_length=100)
+    first_name = forms.CharField(max_length=100)
+    last_name = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    region = forms.CharField(max_length=100)
