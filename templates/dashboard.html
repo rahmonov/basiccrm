@@ -3,16 +3,41 @@
 
 
 {% block title %}
-Dashboard
+    Dashboard
 {% endblock %}
 
 
 {% block content %}
-<h1>DASHBOARD</h1>
+    <h1>DASHBOARD</h1>
+    <div class="row w-100">
 
-<h2>Total clients: {{ total_client_count }}</h2>
-<h2>Unassigned clients: {{ unassigned_clients }}</h2>
-<h2>Assigned clients: {{ assigned_clients }}</h2>
-<h2>Converted clients: {{ converted_clients }}</h2>
+    <div class="card col-2 text-white m-4 bg-primary mb-3" style="max-width: 18rem;">
+        <div class="card-header">Total Clients</div>
+        <div class="card-body">
+            <h1 class="card-title"> {{ total_client_count }}</h1>
+        </div>
+    </div>
+
+     <div class="card col-2 text-white m-4 bg-secondary mb-3" style="max-width: 18rem;">
+        <div class="card-header">Unassigned Clients</div>
+        <div class="card-body">
+            <h1 class="card-title"> {{ unassigned_clients }}</h1>
+        </div>
+    </div>
+
+     <div class="card col-2 text-white m-4 bg-info mb-3" style="max-width: 18rem;">
+        <div class="card-header">Assigned Clients</div>
+        <div class="card-body">
+            <h1 class="card-title"> {{ assigned_clients }}</h1>
+        </div>
+    </div>
+
+     <div class="card col-2 text-white m-4 bg-success mb-3" style="max-width: 18rem;">
+        <div class="card-header">Converted Clients</div>
+        <div class="card-body">
+            <h1 class="card-title"> {{ converted_clients }}</h1>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
