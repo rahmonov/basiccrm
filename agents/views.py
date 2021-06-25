@@ -3,8 +3,9 @@ from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
+from django.views.generic.edit import DeleteView
 
 from agents.forms import AgentForm
 from agents.models import Agent
@@ -37,7 +38,7 @@ class AgentListView(LoginRequiredMixin, View):
             'page_obj': page_obj,
         }
 
-        return render(request, 'agents/index.html', context)
+        return render(request, 'agents/list.html', context)
 
       
 class AgentCreateView(LoginRequiredMixin, View):
@@ -45,6 +46,7 @@ class AgentCreateView(LoginRequiredMixin, View):
     def get(self, request):
         business_owner = request.user.businessowner
         form = AgentForm(initial={'business_owner':business_owner})
+        
         context = {
             'form': form
         }
@@ -84,4 +86,12 @@ class AgentCreateView(LoginRequiredMixin, View):
             return redirect(reverse('agents:list'))
         else:
             return render(request, 'agents/create.html', context)
+          
+
+class AgentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Agent
+    context_object_name = "agent"
+    success_url = reverse_lazy('agents:list')
+    template_name = 'agents/delete_confirm.html'
+    pk_url_kwarg = "id"
 
