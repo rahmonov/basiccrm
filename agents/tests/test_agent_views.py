@@ -10,7 +10,6 @@ class AgentViewTests(BaseAgentTestCase):
         self.client.login(username="someuser", password='testpass')
         res = self.client.get(url)
 
-        self.assertContains(res, 'agent1')
         self.assertContains(res, "Agents")
         self.assertEqual(res.status_code, 200)
 
