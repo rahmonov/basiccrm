@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect
@@ -65,13 +66,15 @@ class AgentCreateView(LoginRequiredMixin, View):
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
             region = form.cleaned_data['region']
 
             user = User.objects.create(
                 username=username,
                 first_name=first_name,
                 last_name=last_name,
-                email=email
+                email=email,
+                password=make_password(password)
             )
 
             Agent.objects.create(
