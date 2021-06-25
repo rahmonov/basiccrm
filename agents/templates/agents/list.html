@@ -1,17 +1,97 @@
 {% extends 'base.html' %}
 
+{% block style %}
+{% endblock %}
+
+
+{% block title %}
+    Agents
+{% endblock %}
+
 
 {% block content %}
-    <h3>Agents:</h3>
+    <main>
+        <h1 class="mt-4">Agents</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">{{ request.user.username }}'s agents:</li>
+        </ol>
 
-    <a href="{%  url 'agents:create' %}">Create an agent</a>
+        <div class="row mb-5 w-75">
+            <a class="col-3 btn btn-primary w-25" href="{% url 'agents:create' %}">
+                Create an Agent
+            </a>
+            <div class="col-6 w-75">
+                <div class="container-fluid">
+                    <form class="d-flex" method="get">
+                        <input class="form-control me-2" type="text" name="q" placeholder="Search" aria-label="Search">
+                        <button class="btn w-25 btn-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-    {% for agent in agents %}
 
-        <p class="client-row">
-            {{ agent.user }} {{ agent.business_owner }}:
-            <a href="#">Delete</a> / <a href="#">Update</a> / <a href="#">View</a>
-        </p>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Region</th>
+                <th>Edit</th>
+            </tr>
+            </thead>
 
-    {% endfor %}
+            <tbody>
+            {% for agent in agents %}
+                <tr class="table-light">
+                    <td>{{ agent.user.first_name }} {{ agent.user.last_name }}</td>
+                    <td>{{ agent.user.email }}</td>
+                    <td>{{ agent.region }}</td>
+                    <td>
+                        <div class="btn dropdown">
+                            <a class="dropdown-toggle" id="navbarDropdown" href="#"
+                               role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false"><i class="fas fa-user-edit"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item"
+                                       href="#">Detail</a>
+                                </li>
+                                <li><a class="dropdown-item"
+                                       href="#">Update</a>
+                                </li>
+                                <li><a class="dropdown-item"
+                                       href="{% url 'agents:delete' agent.id %}">Delete</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <a href="#" class="page-link">{{ page_obj.number }}</a>
+                </li>
+
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last
+                        &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </main>
 {% endblock %}
+
+

@@ -64,6 +64,7 @@ class ClientViewTestCase(BaseTestCase):
         res = self.client.get(url)
 
         self.assertEqual(res.status_code, 200)
+        self.assertContains(res, "clients")
         self.assertContains(res, "First")
 
     def test_search_is_working(self):
