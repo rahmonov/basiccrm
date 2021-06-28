@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Agent Detail
+{% endblock %}
+
+{% block content %}
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Email</th>
+            <th scope="col">Region</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ agent.user.first_name }}</td>
+            <td>{{ agent.user.last_name }}</td>
+            <td>{{ agent.user.email }}</td>
+            <td>{{ agent.region }}</td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

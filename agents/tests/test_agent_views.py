@@ -29,6 +29,7 @@ class AgentViewTests(BaseAgentTestCase):
         self.assertRedirects(res, reverse('agents:list'), status_code=302, target_status_code=200)
         self.assertEqual(False, Agent.objects.filter(pk=self.agent1.id).exists())
 
+
     def test_agent_update_GET_method(self):
         self.client.login(username='someuser', password='testpass')
         url = reverse('agents:update', args=[self.agent1.id])
@@ -55,4 +56,15 @@ class AgentViewTests(BaseAgentTestCase):
         agent = Agent.objects.get(pk=self.agent1.id)
         self.assertEqual(agent.user.username, 'agent_changed')
 
+
+    def test_agent_detail_view(self):
+        self.client.login(username='someuser', password='testpass')
+        url = reverse('agents:detail', args=[self.agent1.id])
+
+        res = self.client.get(url)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, self.agent1.user.first_name)
+        self.assertContains(res, self.agent1.region)
+        
 

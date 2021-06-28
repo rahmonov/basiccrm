@@ -54,7 +54,7 @@
                                aria-expanded="false"><i class="fas fa-user-edit"></i></a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item"
-                                       href="#">Detail</a>
+                                       href="{% url 'agents:detail' agent.id %}">Detail</a>
                                 </li>
                                 <li><a class="dropdown-item"
                                        href="{% url 'agents:update' agent.id %}">Update</a>

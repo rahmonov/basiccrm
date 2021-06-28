@@ -22,19 +22,37 @@
 
           <h1 class="logo">MyClients</h1>
           <nav class="nav nav-masthead justify-content-center">
-            <a class=" nav-link active" href="#">Home</a>
+            <a class="nav-link active" href="#">Home</a>
+            <a class="nav-link" href="{% url 'clients:list' %}">Clients</a>
+            <a class="nav-link me-2" href="{% url 'agents:list' %}">Agents</a>
+
+            {% if request.user.is_authenticated %}
+              <span class="nav-link disabled me-2" >Logged in as <b>{{ request.user.username }}</b></span>
+              <a href="{% url 'users:logout' %}" role="button" class="btn btn-outline-danger">Log out</a>
+            {% endif %}
           </nav>
         </div>
       </header>
 
-      <main role="main" class="inner cover">
-        <h1 class="desc-1">Create Your Own CRM!</h1>
-        <p class="desc-2">MyClients CRM platform is designed to help businesses and organizations to manage their clients.</p>
-        <p class="lead">
-          <a href="{% url 'users:login' %}" class="btn btn-lg btn-primary">Sign in</a>
-          <a href="{% url 'users:register' %}" class="btn btn-lg btn-secondary">Sign up</a>
-        </p>
-      </main>
+      {% if request.user.is_authenticated %}
+
+        <main role="main" class="inner cover">
+          <h1 class="desc-1">Create Your Own CRM!</h1>
+          <p class="desc-2">MyClients CRM platform is designed to help businesses and organizations to manage their clients.</p>
+        </main>
+
+      {% else %}
+
+        <main role="main" class="inner cover">
+          <h1 class="desc-1">Create Your Own CRM!</h1>
+          <p class="desc-2">MyClients CRM platform is designed to help businesses and organizations to manage their clients.</p>
+          <p class="lead">
+            <a href="{% url 'users:login' %}" class="btn btn-lg btn-primary">Sign in</a>
+            <a href="{% url 'users:register' %}" class="btn btn-lg btn-secondary">Sign up</a>
+          </p>
+        </main>
+
+      {% endif %}
     </div>
 
 </body>
