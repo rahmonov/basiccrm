@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic.edit import DeleteView
-
+from django.views.generic import DetailView
 from agents.forms import AgentForm
 from agents.models import Agent
 from users.models import User
@@ -35,13 +35,13 @@ class AgentListView(LoginRequiredMixin, View):
 
         return render(request, 'agents/list.html', context)
 
-      
+
 class AgentCreateView(LoginRequiredMixin, View):
 
     def get(self, request):
         business_owner = request.user.businessowner
-        form = AgentForm(initial={'business_owner':business_owner})
-        
+        form = AgentForm(initial={'business_owner': business_owner})
+
         context = {
             'form': form
         }
@@ -81,7 +81,7 @@ class AgentCreateView(LoginRequiredMixin, View):
             return redirect(reverse('agents:list'))
         else:
             return render(request, 'agents/create.html', context)
-          
+
 
 class AgentDeleteView(LoginRequiredMixin, DeleteView):
     model = Agent
@@ -90,3 +90,9 @@ class AgentDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'agents/delete_confirm.html'
     pk_url_kwarg = "id"
 
+
+class AgentDetailView(DetailView, LoginRequiredMixin):
+    model = Agent
+    template_name = 'agents/agent-detail.html'
+    context_object_name = 'agent'
+    pk_url_kwarg = 'id'
