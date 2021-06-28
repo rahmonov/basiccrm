@@ -10,11 +10,11 @@
     <h1>Are You Sure? You want to delete {{ agent }}</h1>
 
     <a href="{% url 'agents:list' %}">
-        <button>No</button>
+        <button class="btn btn-success m-2 w-25">No</button>
     </a>
     <form method="post">
         {% csrf_token %}
-        <button type="submit">Yes</button>
+        <button class="btn btn-danger m-2 w-25" type="submit">Yes</button>
     </form>
 
 {% endblock %}

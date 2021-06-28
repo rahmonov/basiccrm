@@ -4,10 +4,10 @@
 {% block content %}
     <h1>Are you sure you want to delete {{ client }}?</h1>
 
-    <a href="{% url 'clients:list' %}"><button>No</button></a>
+    <a href="{% url 'clients:list' %}"><button class="btn btn-success w-25 m-2">No</button></a>
 
     <form method="post">
         {% csrf_token %}
-        <button>Yes</button>
+        <button class="btn btn-danger btn-lg w-25 m-2">Yes</button>
     </form>
 {% endblock %}
