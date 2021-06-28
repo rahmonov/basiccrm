@@ -12,6 +12,8 @@ urlpatterns = [
     path('crm/clients/', include('clients.urls'), name='clients'),
     path('crm/agents/', include('agents.urls'), name='agents'),
     path('users/', include('users.urls'), name='users'),
+    path('api/', include('api.urls'), name='api'),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 
 if settings.DEBUG:
