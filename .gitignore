@@ -5,3 +5,4 @@ __pycache__
 media-files
 static-files
 .DS_Store
+basiccrm/.env
