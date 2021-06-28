@@ -4,4 +4,4 @@ db.sqlite3
 __pycache__
 media-files
 static-files
-
+basiccrm/.env
