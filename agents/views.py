@@ -7,7 +7,10 @@ from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic.edit import DeleteView
 
+from agents.forms import AgentForm, AgentUpdateForm
+from django.views.generic import DetailView
 from agents.forms import AgentForm
+
 from agents.models import Agent
 from users.models import User
 
@@ -35,13 +38,13 @@ class AgentListView(LoginRequiredMixin, View):
 
         return render(request, 'agents/list.html', context)
 
-      
+
 class AgentCreateView(LoginRequiredMixin, View):
 
     def get(self, request):
         business_owner = request.user.businessowner
-        form = AgentForm(initial={'business_owner':business_owner})
-        
+        form = AgentForm(initial={'business_owner': business_owner})
+
         context = {
             'form': form
         }
@@ -81,7 +84,7 @@ class AgentCreateView(LoginRequiredMixin, View):
             return redirect(reverse('agents:list'))
         else:
             return render(request, 'agents/create.html', context)
-          
+
 
 class AgentDeleteView(LoginRequiredMixin, DeleteView):
     model = Agent
@@ -89,4 +92,62 @@ class AgentDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('agents:list')
     template_name = 'agents/delete_confirm.html'
     pk_url_kwarg = "id"
+
+
+class AgentUpdateView(LoginRequiredMixin, View):
+
+    def get(self, request, id):
+        agent = Agent.objects.get(pk=id)
+        data = {
+            'username': agent.user.username,
+            'first_name': agent.user.first_name,
+            'last_name': agent.user.last_name,
+            'email': agent.user.email,
+            'region': agent.region,
+        }
+
+        form = AgentUpdateForm(data=data)
+
+        context = {
+            'form': form
+        }
+
+        return render(request, template_name='agents/update.html', context=context)
+
+    def post(self, request, id):
+        agent = Agent.objects.get(pk=id)
+        user = agent.user
+
+        form = AgentUpdateForm(request.POST)
+
+        context = {
+            'form': form
+        }
+
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            region = form.cleaned_data['region']
+
+            user.username = username
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.save()
+
+            agent.user = user
+            agent.region = region
+            agent.save()
+
+            return redirect('agents:list')
+        else:
+            return render(request, template_name='agents/update.html', context=context)
+
+class AgentDetailView(DetailView, LoginRequiredMixin):
+    model = Agent
+    template_name = 'agents/agent-detail.html'
+    context_object_name = 'agent'
+    pk_url_kwarg = 'id'
 
