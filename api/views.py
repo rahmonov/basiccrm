@@ -1,16 +1,28 @@
-from rest_framework import generics, status
+from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from clients.models import Client
 from api.serializer import ClientSerializer
 
 
-class ClientListAPIView(generics.ListCreateAPIView):
+class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
     permission_classes = [IsAuthenticated]
+    lookup_field = 'id'
+    ordering = 'id'
+
+    @action(methods=["post"], detail=True, url_path="delete_and_read", url_name="delete-and-read")
+    def delete_and_read(self, request):
+        return Response(data={'message': 'Deleted and Read'})
+
+
+# class ClientListAPIView(generics.ListCreateAPIView):
+#     queryset = Client.objects.all()
+#     serializer_class = ClientSerializer
+#     permission_classes = [IsAuthenticated]
 
 
 # class ClientListAPIView(APIView):
@@ -33,11 +45,11 @@ class ClientListAPIView(generics.ListCreateAPIView):
 #         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ClientDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Client.objects.all()
-    serializer_class = ClientSerializer
-    permission_classes = [IsAuthenticated]
-    lookup_field = 'id'
+# class ClientDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Client.objects.all()
+#     serializer_class = ClientSerializer
+#     permission_classes = [IsAuthenticated]
+#     lookup_field = 'id'
 
 
 # class ClientDetailAPIView(APIView):
