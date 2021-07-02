@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
 from django.core.paginator import Paginator
+from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
@@ -60,26 +62,35 @@ class AgentCreateView(LoginRequiredMixin, View):
         }
 
         if form.is_valid():
-            username = form.cleaned_data['username']
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            region = form.cleaned_data['region']
+            with transaction.atomic():
+                username = form.cleaned_data['username']
+                first_name = form.cleaned_data['first_name']
+                last_name = form.cleaned_data['last_name']
+                email = form.cleaned_data['email']
+                password = form.cleaned_data['password']
+                region = form.cleaned_data['region']
 
-            user = User.objects.create(
-                username=username,
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                password=make_password(password)
-            )
+                user = User.objects.create(
+                    username=username,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    password=make_password(password)
+                )
 
-            Agent.objects.create(
-                user=user,
-                business_owner=business_owner,
-                region=region
-            )
+                Agent.objects.create(
+                    user=user,
+                    business_owner=business_owner,
+                    region=region
+                )
+
+                send_mail(
+                    subject='Account Created',
+                    message=f'An account was created for you in BasicCRM. '
+                            f'Your username is {username} and your password is {password}',
+                    from_email='jrahmonov2@gmail.com',
+                    recipient_list=[user.email]
+                )
 
             return redirect(reverse('agents:list'))
         else:
