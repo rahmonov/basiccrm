@@ -14,6 +14,7 @@ from django.views.generic import DetailView
 from agents.forms import AgentForm
 
 from agents.models import Agent
+from agents.tasks import send_created_email
 from users.models import User
 
 
@@ -84,13 +85,7 @@ class AgentCreateView(LoginRequiredMixin, View):
                     region=region
                 )
 
-                send_mail(
-                    subject='Account Created',
-                    message=f'An account was created for you in BasicCRM. '
-                            f'Your username is {username} and your password is {password}',
-                    from_email='jrahmonov2@gmail.com',
-                    recipient_list=[user.email]
-                )
+                send_created_email.delay(username, password, user.email)
 
             return redirect(reverse('agents:list'))
         else:
@@ -156,9 +151,9 @@ class AgentUpdateView(LoginRequiredMixin, View):
         else:
             return render(request, template_name='agents/update.html', context=context)
 
+
 class AgentDetailView(DetailView, LoginRequiredMixin):
     model = Agent
     template_name = 'agents/agent-detail.html'
     context_object_name = 'agent'
     pk_url_kwarg = 'id'
-
