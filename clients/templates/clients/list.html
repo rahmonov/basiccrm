@@ -29,14 +29,14 @@ dashboard
     <ul class="nav nav-tabs">
         {% if not user.is_agent %}
             <li class="nav-item">
-                <a class="nav-link {% if type_client == 'unassigned' %} active {% endif %}" aria-current="page" href="?type=unassigned">Unassigned</a>
+                <a class="nav-link {% if client_type == 'unassigned' %} active {% endif %}" aria-current="page" href="?type=unassigned">Unassigned</a>
             </li>
         {% endif %}
         <li class="nav-item">
-            <a class="nav-link {% if type_client == 'assigned' %} active {% endif %}" href="?type=assigned">Assigned</a>
+            <a class="nav-link {% if client_type == 'assigned' %} active {% endif %}" href="?type=assigned">Assigned</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {% if type_client == 'converted' %} active {% endif %}" href="?type=converted">Converted</a>
+            <a class="nav-link {% if client_type == 'converted' %} active {% endif %}" href="?type=converted">Converted</a>
         </li>
     </ul>
 
