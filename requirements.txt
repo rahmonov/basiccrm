@@ -1,3 +1,4 @@
+celery==5.1.2
 crispy-bootstrap5==0.4
 Django==3.2.4
 django-crispy-forms==1.11.2
